@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "plant-sensor-manager"
+version = "0.1.0"
+description = "Plant sensor manager for embedded device closest to plant"
+authors = ["Szymon Romanek <srszymonsr@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+confluent-kafka = "^2.2.0"
+requests = "^2.32.3"
+pycryptodome = "^3.21.0"
+
+[tool.poetry.group.dev.dependencies]
+pylama = "^8.4.1"
+black = "^24.10.0"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
