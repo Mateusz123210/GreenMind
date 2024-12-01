@@ -8,14 +8,16 @@ This is a temporary script file.
 from fastapi import FastAPI
 import random, json
 import weather_api
+import training.predictions as pred
 from datetime import datetime as dt
 from datetime import date as _date
+import datetime
 
 app=FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "GreenMind ml_service"}
+    return {"message": "Hello from GreenMind ml_service"}
 
 @app.get("/weather")
 async def weather(date: str = "", lat: float = 0, lon: float=0):
@@ -28,9 +30,7 @@ async def weather(date: str = "", lat: float = 0, lon: float=0):
         return weather_api.get_weather_forecast(lat, lon, date)
 
 @app.get("/prediction")
-async def water_usage_prediction():
-    data = {}
-    data["random"]= random.random()
-    return data
+async def indoor_coonditions_prediction(datetime, outside_temperature, uv_index):
+    return pred.predict_indoor_hourly(datetime, outside_temperature, uv_index)
 
 

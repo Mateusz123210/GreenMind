@@ -1,4 +1,4 @@
-import machine, onewire, ds18x20, time, utime
+import machine, onewire, ds18x20, time
 
 ds_pin = machine.Pin(15)
 ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
@@ -24,14 +24,14 @@ while True:
   ds_sensor.convert_temp()
   time.sleep_ms(750)
   for rom in roms:
-    print(rom)
+    #print(rom)
     tempC = ds_sensor.read_temp(rom)
     tempF = tempC * (9/5) +32
     print('temperature (ºC):', "{:.2f}".format(tempC))
-    print('temperature (ºF):', "{:.2f}".format(tempF))
+    #print('temperature (ºF):', "{:.2f}".format(tempF))
     print()
     light = read_light_intensity()
     humidity= read_humidity()
     print("Light Intensity: {:.0f} lux".format(light))
-    print("Hum: {:.2f}".format(humidity))
+    print("Humidity: {:.2f}".format(humidity))
   time.sleep(0.1)

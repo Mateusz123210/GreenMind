@@ -7,7 +7,6 @@ Created on Sun Nov 17 15:37:37 2024
 
 import requests
 
-
 def get_weather_forecast(location_lat, location_lon, date):
     """
     Fetch the weather forecast for a specific location and date using Open-Meteo API.
@@ -63,7 +62,54 @@ def get_weather_forecast(location_lat, location_lon, date):
     
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
-
+    
+def get_weather_forecast_for_hour(location_lat, location_lon, date, hour):
+    try:
+        # Base URL for Open-Meteo API
+        base_url = "https://api.open-meteo.com/v1/forecast"
+        
+        # Define query parameters
+        params = {
+            "latitude": location_lat,
+            "longitude": location_lon,
+            "start_date": date,
+            "end_date": date,
+            "hourly": "temperature_2m,precipitation,uv_index",
+            "timezone": "auto"  
+        }
+        
+        # Make the API request
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        
+        # Parse the response JSON
+        weather_data = response.json()
+        
+        # Extract daily forecasts
+        hourly_data = weather_data.get("hourly", {})
+        times = hourly_data.get("time", [])
+        temperatures = hourly_data.get("temperature_2m", [])
+        precipitations = hourly_data.get("precipitation", [])
+        uv_indexes = hourly_data.get("uv_index", [])
+        
+        # Combine date and hour to form the target time string
+        target_time = f"{date}T{hour:02d}:00"
+        
+        # Find the index of the requested time
+        if target_time in times:
+            index = times.index(target_time)
+            return {
+                "time": target_time,
+                "temperature": temperatures[index],
+                "precipitation": precipitations[index],
+                "uv_index": uv_indexes[index]
+            }
+        
+        # If the time is not found in the response
+        return {"error": "No forecast available for the specified hour."}
+    
+    except requests.exceptions.RequestException as e:
+        return {"error": str(e)}
 
     
 def get_historical_weather(location_lat, location_lon, date):
