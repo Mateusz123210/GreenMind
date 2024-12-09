@@ -15,7 +15,7 @@ if __name__ == "__main__":
     light_sensor = MockLightSensor()
 
     kafka_connector = KafkaConnector(
-        "localhost:9092",
+        "20.254.227.50:9092",
         command_callbacks={},
     )
 
