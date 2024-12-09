@@ -7,9 +7,14 @@ from sensors.mock_sensors import (
     MockTemperatureSensor,
 )
 
-NUMBER_OF_MESSAGES_TO_SEND = 10
+NUMBER_OF_MESSAGES_TO_SEND = 5
 
 if __name__ == "__main__":
+    #for first sensors device 
+    token = "Y9N/x9Fj0qnL3jDRoQbTuvzz/odzslBcJBMlzePjP1HEz9m2WNLCjPYwipxSFq6x+JhTxjzg7iidC2AlYKvUQg=="
+    #for second sensors device
+    # token = "UMe6Nf+U6kn8bJSpKMLb7N5ycSXlaR6ovbiDLwl/1kDSpnxDur4+PRA2DZfkbyCWWHJc96xV4naQ6cIPYz71Ow=="
+
     humidity_sensor = MockHumiditySensor()
     temperature_sensor = MockTemperatureSensor()
     light_sensor = MockLightSensor()
@@ -21,6 +26,7 @@ if __name__ == "__main__":
 
     for i in range(NUMBER_OF_MESSAGES_TO_SEND):
         json_data = {
+            "token": token,
             "humidity": humidity_sensor.read(),
             "temperature": temperature_sensor.read(),
             "light": light_sensor.read(),
