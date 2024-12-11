@@ -1,5 +1,6 @@
 """This test script sends a mock message to the Kafka topic."""
 
+import time
 from connectivity.kafka_connector import KafkaConnector
 from sensors.mock_sensors import (
     MockHumiditySensor,
@@ -27,9 +28,10 @@ if __name__ == "__main__":
     for i in range(NUMBER_OF_MESSAGES_TO_SEND):
         json_data = {
             "token": token,
-            "humidity": humidity_sensor.read(),
+            "timestamp": time.time(),
             "temperature": temperature_sensor.read(),
-            "light": light_sensor.read(),
+            "illuminance": light_sensor.read(),
+            "moisture": humidity_sensor.read()      
         }
         kafka_connector.send_one(bytes(str(json_data), "utf-8"))
     kafka_connector.flush()
