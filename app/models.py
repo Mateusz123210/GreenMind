@@ -1,9 +1,12 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Float
 from app.database import Base
 
-class Token(Base):
-    __tablename__ = "tokens"
+class Plant(Base):
+    __tablename__ = "plants"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False)
-    token = Column(String, nullable=False)
+    id = Column(Integer, primary_key = True)
+    name = Column(String, nullable = False)    
+    token = Column(String, nullable = False)
+    user_id = Column(Integer, nullable = False)
+    latitude = Column(Float, nullable = False)
+    longtitude = Column(Float, nullable = False)

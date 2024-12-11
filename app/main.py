@@ -2,8 +2,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.database import engine
 from app.database import Base
-from app.schemas import *
-from app import services
 from fastapi.middleware.cors import CORSMiddleware
 from threading import Thread
 from app.kafka_controller import KafkaController
@@ -50,14 +48,3 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post('/token')
-async def add_token(data: Token):
-    return services.add_token(data)
-
-@app.delete('/token')
-async def delete_token(data: Token):
-    return services.delete_token(data)
-
-@app.delete('/user')
-async def delete_user(data: UserID):
-    return services.delete_user(data)
