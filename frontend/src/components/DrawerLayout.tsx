@@ -10,7 +10,6 @@ import {
     Drawer,
     IconButton,
     List,
-    Stack,
     Theme,
     Toolbar,
     Typography,
@@ -20,6 +19,12 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavigationListItem from "./NavigationListItem";
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import SensorsIcon from '@mui/icons-material/Sensors';
+// import YardIcon from '@mui/icons-material/Yard';
+import GrassIcon from '@mui/icons-material/Grass';
+import FenceIcon from '@mui/icons-material/Fence';
 
 interface Props extends PropsWithChildren {
     pageTitle?: string;
@@ -30,8 +35,6 @@ interface Props extends PropsWithChildren {
 export const DrawerLayout: React.FC<Props> = ({
     children,
     pageTitle = "GreenMind",
-    subpageTitle,
-    center = false,
 }) => {
     const isDesktop = useMediaQuery((t: Theme) => t.breakpoints.up("md"));
     const [isDrawerOpen, setDrawerOpen] = useState<boolean>(isDesktop);
@@ -78,21 +81,18 @@ export const DrawerLayout: React.FC<Props> = ({
                 </Toolbar>
                 <Divider />
                 <List disablePadding>
-                    <NavigationListItem href="account">Konto</NavigationListItem>
-                    <NavigationListItem href="plantation">Hodowla</NavigationListItem>
-                    <NavigationListItem href="sensors">Sensory</NavigationListItem>
-                    <NavigationListItem href="predictions">Prognoza</NavigationListItem>
-                    <NavigationListItem href="statistics">Statystyki</NavigationListItem>
+                    <NavigationListItem href="plants" icon={<GrassIcon/>}>Rośliny</NavigationListItem>
+                    <Divider variant="middle" />
+                    <NavigationListItem href="plantation" icon={<FenceIcon/>}>Hodowla</NavigationListItem>
+                    <Divider variant="middle" />
+                    <NavigationListItem href="sensors" icon={<SensorsIcon/>}>Sensory</NavigationListItem>
+                    <Divider variant="middle" />
+                    <NavigationListItem href="predictions" icon={<AutoAwesomeIcon/>}>Prognozy</NavigationListItem>
+                    <Divider variant="middle" />
+                    <NavigationListItem href="statistics" icon={<AutoGraphIcon/>}>Statystyki</NavigationListItem>
                 </List>
             </Drawer>
             <Box component="main" sx={[{ p: 2 }, contentMovedByDrawer(isDrawerOpen && isDesktop)]}>
-                <Stack alignItems={center ? "center" : "start"} gap={3}>
-                    <Stack direction="row" gap={2} sx={{ width: "100%", maxWidth: 800, pb: 2 }}>
-                        <Typography variant="h5" component="h2">
-                            {subpageTitle}
-                        </Typography>
-                    </Stack>
-                </Stack>
                 {children}
             </Box>
         </>
