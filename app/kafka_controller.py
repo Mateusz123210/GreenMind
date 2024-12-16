@@ -16,17 +16,25 @@ class KafkaController:
         self.max_measurements_number = 527040 #60 x 24 x 366
         self.consumer = KafkaConsumer('plants-info', bootstrap_servers=['20.254.227.50:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
+        self.consuming = True
 
     def consume(self):
-        
-        try:
-            for message in self.consumer:
-                self.validate(message.value.decode('utf-8'))
-                
-        except Exception:
-            pass
+
+        while self.consuming is True:
+            message = self.consumer.poll(timeout_ms=1000, max_records=1) 
+
+            if message:  
+                for msg in message.values():
+                    for m in msg:
+
+                        try:
+                            self.validate(m.value.decode('utf-8'))
+
+                        except Exception:
+                            pass
 
     def stop_consuming(self):
+        self.consuming = False
         self.consumer.close()
 
     @transactional
