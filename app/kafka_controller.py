@@ -1,8 +1,8 @@
 from kafka import KafkaConsumer
 import json
 from app import crud
-from app.mongo_database import collection_green_mind
-from app.decorators.mongo_database import mongo_transactional
+from app.mongo_sensors_database import sensors_db_collection
+from app.decorators.mongo_sensors_decorator import mongo_sensors_transactional
 from app.decorators.database import transactional
 from datetime import datetime, UTC
 import pytz
@@ -79,13 +79,13 @@ class KafkaController:
             timestamp < 1733913402:
             return
 
-        self.add_to_database(token = fetched_plant.token, moisture = moisture, 
+        self.add_to_database(id = fetched_plant.id, moisture = moisture, 
                            temperature = temperature, illuminance = illuminance, timestamp = timestamp)
 
-    @mongo_transactional
-    def add_to_database(self, token, moisture, temperature, illuminance, timestamp, session):
+    @mongo_sensors_transactional
+    def add_to_database(self, id, moisture, temperature, illuminance, timestamp, session):
 
-        sensor = collection_green_mind.find_one({"token": token}, session=session)
+        sensor = sensors_db_collection.find_one({"id": id}, session=session)
 
         if sensor:
 
@@ -100,9 +100,9 @@ class KafkaController:
             filter = { '_id': sensor["_id"] }
             new_values = { "$set": { 'sensor_data': sensor_data } }
 
-            collection_green_mind.update_one(filter, new_values, session=session)
+            sensors_db_collection.update_one(filter, new_values, session=session)
         
         else:
 
-            insert_data = {"token": token, "sensor_data": [[moisture, temperature, illuminance, timestamp, datetime.now(UTC)]]}
-            collection_green_mind.insert_one(insert_data)
+            insert_data = {"id": id, "sensor_data": [[moisture, temperature, illuminance, timestamp, datetime.now(UTC)]]}
+            sensors_db_collection.insert_one(insert_data)
