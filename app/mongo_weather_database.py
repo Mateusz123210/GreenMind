@@ -10,5 +10,5 @@ try:
 except Exception as e:
     print(e)
 
-db = client.GreenMindSensorsData
+db = client.GreenMindWeatherData
 weather_db_collection = db["GreenMindWeatherData"]
