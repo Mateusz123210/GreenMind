@@ -79,7 +79,7 @@ class KafkaController:
             timestamp < 1733913402:
             return
 
-        self.add_to_database(id = fetched_plant.id, moisture = moisture, 
+        self.add_to_database(id = fetched_plant.uuid, moisture = moisture, 
                            temperature = temperature, illuminance = illuminance, timestamp = timestamp)
 
     @mongo_sensors_transactional

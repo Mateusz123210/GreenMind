@@ -10,3 +10,4 @@ class Plant(Base):
     user_id = Column(Integer, nullable = False)
     latitude = Column(Float, nullable = False)
     longtitude = Column(Float, nullable = False)
+    uuid = Column(String, nullable = False, unique = True)
