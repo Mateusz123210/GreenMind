@@ -4,10 +4,9 @@ from app.decorators.database import transactional
 import time
 from threading import Thread
 from confluent_kafka import Producer
-import time
 
 
-class KafkaController:
+class WeatherKafkaController:
 
     def __init__(self):
 

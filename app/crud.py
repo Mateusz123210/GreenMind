@@ -1,5 +1,4 @@
-from app import models, schemas
-from app.schemas import *
+from app import models
 from app.decorators.database import db
 
 @db
