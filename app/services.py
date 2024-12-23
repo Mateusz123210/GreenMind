@@ -1,11 +1,3 @@
-from fastapi import HTTPException
-from fastapi.responses import Response
-from app import crud
-from app.schemas import *
-from app.decorators.database import transactional
-from app.decorators.mongo_database import mongo_transactional
-from app.mongo_database import collection_green_mind
-
 import requests
 
 def get_weather_forecast(location_lat, location_lon, date):

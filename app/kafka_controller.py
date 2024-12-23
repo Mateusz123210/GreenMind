@@ -1,9 +1,7 @@
 from kafka import KafkaConsumer
 import json
-from app import crud
-from app.mongo_database import collection_green_mind
-from app.decorators.mongo_database import mongo_transactional
-from app.decorators.database import transactional
+from app.mongo_weather_database import weather_db_collection
+from app.decorators.mongo_weather_decorator import mongo_weather_transactional
 import time as tm
 from datetime import datetime, UTC
 from app import services
@@ -83,11 +81,11 @@ class KafkaController:
                              weather["precipitation"])
 
 
-    @mongo_transactional
+    @mongo_weather_transactional
     def add_to_database(self, latitude, longtitude, date, max_temp, min_temp, precipitation, session):
 
         db_key = str(latitude) + "_" + str(longtitude)
-        weather_fetched = collection_green_mind.find_one({"location": db_key}, session=session)
+        weather_fetched = weather_db_collection.find_one({"location": db_key}, session=session)
 
         if weather_fetched:
 
@@ -98,9 +96,9 @@ class KafkaController:
             filter = { '_id': weather_fetched["_id"] }
             new_values = { "$set": { 'weather_data': [weather_data] } }
 
-            collection_green_mind.update_one(filter, new_values, session=session)
+            weather_db_collection.update_one(filter, new_values, session=session)
 
         else:
 
             insert_data = {"location": db_key, "weather_data": [[date, max_temp, min_temp, precipitation, datetime.now(UTC)]]}
-            collection_green_mind.insert_one(insert_data)
+            weather_db_collection.insert_one(insert_data)
