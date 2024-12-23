@@ -15,7 +15,6 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . /usr/src/app
 
-EXPOSE 8000
+EXPOSE 8004
 
-
-CMD ["uvicorn" , "app.main:app", "--host", "0.0.0.0", "--reload"]
+CMD ["uvicorn" , "app.main:app", "--host", "0.0.0.0", "--port", "8004", "--reload"]

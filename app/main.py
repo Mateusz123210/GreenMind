@@ -1,9 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from app.database import engine
-from app.database import Base
-from app.schemas import *
-from app import services
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from threading import Thread
 from app.kafka_controller import KafkaController
@@ -23,19 +19,17 @@ class SecondThread:
         self.consumer.consume()
 
 second_thread = SecondThread()
-Base.metadata.create_all(bind=engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     pass
-    # thread = Thread(name='daemon', target=second_thread.consume_messsages_from_kafka)
-    # thread.start()
+    thread = Thread(name='daemon', target=second_thread.consume_messsages_from_kafka)
+    thread.start()
 
-    # yield
     yield
 
-    # second_thread.stop_work()
-    # thread.join()
+    second_thread.stop_work()
+    thread.join()
 
 app = FastAPI(lifespan=lifespan)
 
@@ -51,7 +45,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get('/sensor-data')
-async def get_sensor_data(data: str):
-    return services.get_sensor_data(data)
-
+@app.post("/working")
+async def working():
+    return Response()
