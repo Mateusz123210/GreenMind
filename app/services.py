@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from app import crud
 from app.generators import jwt_token_generator
 from app.utils import create_access_token, create_refresh_token
-import datetime
+from datetime import datetime, UTC, timedelta
 from app.schemas import *
 from app import validating
 from app.decorators.database import transactional
@@ -13,6 +13,7 @@ from app.utils import (
 )
 from pydantic import ValidationError
 from app import hashing
+from app.generators.uuid_generator import generate_uuid
 
 @transactional
 def register(data: Login):
@@ -32,7 +33,7 @@ def register(data: Login):
     utc=pytz.UTC
 
     db_user = crud.create_user(email=data.email, password=hashed_password, 
-                               last_login_attempt=datetime.datetime.now(datetime.UTC))
+                               last_login_attempt=datetime.now(UTC), uuid = generate_uuid())
                                   
     return {}
 
@@ -67,11 +68,16 @@ def login(data: Login):
     access_token = create_access_token(data.email, access_token_key)
     refresh_token = create_refresh_token(data.email, refresh_token_key)
 
-    access_token_expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=15)
-    refresh_token_expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=60*24)
+    access_token_expiration_time = datetime.now(UTC) + timedelta(minutes=15)
+    refresh_token_expiration_time = datetime.now(UTC) + timedelta(minutes=60*24)
 
     crud.login_user(db_user, access_token_key, access_token_expiration_time, refresh_token_key, 
                     refresh_token_expiration_time)
+    
+    utc=pytz.UTC
+
+    if datetime.now(UTC) - timedelta(seconds = 0.5) <= utc.localize(db_user.last_login_attempt):
+        raise HTTPException(status_code=429, detail="You are too fast! There is probability, that you are a robot.")
                                   
     return {"access_token": access_token, "refresh_token": refresh_token}
 
@@ -102,7 +108,7 @@ def logout(access_token: str, email: str):
             if payload["sub"] == email:
                 found = True
                 utc=pytz.UTC
-                datetime_now = datetime.datetime.now(datetime.UTC)
+                datetime_now = datetime.now(UTC)
                 token_expiration_time = utc.localize(db_token.access_token_expiration_time)
                 if datetime_now <= token_expiration_time:
                     expired = False    
@@ -150,7 +156,7 @@ def refresh_token(refresh_token, email):
             if payload["sub"] == email:
                 found = True
                 utc=pytz.UTC
-                datetime_now = datetime.datetime.now(datetime.UTC)
+                datetime_now = datetime.now(UTC)
                 token_expiration_time = utc.localize(db_token.refresh_token_expiration_time)
                 if datetime_now <= token_expiration_time:
                     expired = False       
@@ -186,8 +192,8 @@ def refresh_token(refresh_token, email):
     access_token = create_access_token(email, access_token_key)
     refresh_token = create_refresh_token(email, refresh_token_key)
 
-    access_token_expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=15)
-    refresh_token_expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=60*24)
+    access_token_expiration_time = datetime.now(UTC) + timedelta(minutes=15)
+    refresh_token_expiration_time = datetime.now(UTC) + timedelta(minutes=60*24)
 
     crud.update_token(found_token, access_token_key, access_token_expiration_time, refresh_token_key,
                       refresh_token_expiration_time)
@@ -221,7 +227,7 @@ def delete_account(access_token: str, email: str):
             if payload["sub"] == email:
                 found = True
                 utc=pytz.UTC
-                datetime_now = datetime.datetime.now(datetime.UTC)
+                datetime_now = datetime.now(UTC)
                 token_expiration_time = utc.localize(db_token.access_token_expiration_time)
                 if datetime_now <= token_expiration_time:
                     expired = False    
@@ -256,7 +262,7 @@ def delete_expired_tokens():
     for token in tokens:
 
         utc=pytz.UTC
-        datetime_now = datetime.datetime.now(datetime.UTC)
+        datetime_now = datetime.now(UTC)
         token_expiration_time = utc.localize(token.refresh_token_expiration_time)
 
         if datetime_now > token_expiration_time:

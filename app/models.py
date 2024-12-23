@@ -10,6 +10,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     last_login_attempt = Column(DateTime, nullable=False)
+    uuid = Column(String, nullable = False, unique = True)
 
     user_tokens = relationship("Token", back_populates="users")
 
@@ -22,6 +23,6 @@ class Token(Base):
     access_token_expiration_time = Column(DateTime, nullable=False)
     refresh_token = Column(String, nullable=False)
     refresh_token_expiration_time = Column(DateTime, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.uuid"), nullable=False)
 
     users = relationship("User", back_populates="user_tokens")

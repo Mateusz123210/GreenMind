@@ -1,3 +1,3 @@
 import os
 os.system("docker build . -t backend")
-os.system("docker run -p 8000:8000 backend")
+os.system("docker run -p 8005:8005 backend")
