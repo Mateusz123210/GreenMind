@@ -6,8 +6,8 @@ class Plant(Base):
 
     id = Column(Integer, primary_key = True)
     name = Column(String, nullable = False)    
-    token = Column(String, nullable = False)
-    user_id = Column(Integer, nullable = False)
+    token = Column(String, nullable = False, unique = True)
+    user_id = Column(String, nullable = False)
     latitude = Column(Float, nullable = False)
     longtitude = Column(Float, nullable = False)
     uuid = Column(String, nullable = False, unique = True)
