@@ -99,6 +99,6 @@ class KafkaController:
             weather_db_collection.update_one(filter, new_values, session=session)
 
         else:
-
+            utc=pytz.UTC
             insert_data = {"location": db_key, "weather_data": [[date, max_temp, min_temp, precipitation, datetime.now(UTC)]]}
             weather_db_collection.insert_one(insert_data)
