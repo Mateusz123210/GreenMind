@@ -2,12 +2,10 @@ from fastapi import HTTPException
 from fastapi.responses import Response
 from app import crud
 from app.schemas import *
-from app.decorators.database import transactional
-from app.decorators.mongo_database import mongo_transactional
-from app.mongo_database import collection_green_mind
+from app.decorators.plants_database_decorator import plantsDBTransactional
 
-@mongo_transactional
-@transactional
+
+@plantsDBTransactional
 def get_current_numbers(session):
     
     
@@ -20,7 +18,7 @@ def get_current_numbers(session):
     return Response(status_code=200)
 
 
-@transactional
+@plantsDBTransactional
 def add_plant(data: PlantAddSchema):
     
     plant = crud.get_plant(data.token)
@@ -31,7 +29,7 @@ def add_plant(data: PlantAddSchema):
                                   
     return Response(status_code = 200)
 
-@transactional
+@plantsDBTransactional
 def delete_plant(data: PlantSchema):
     
     plant = crud.get_plant(data.token)
@@ -42,7 +40,7 @@ def delete_plant(data: PlantSchema):
 
     return Response(status_code = 200)
 
-@transactional
+@plantsDBTransactional
 def delete_user(data: UserIDSchema):
     
     user_plants = crud.get_user_plants(user_id = data.user_id)

@@ -1,32 +1,41 @@
-from app import models, schemas
-from app.schemas import *
-from app.decorators.database import db
+from app import plants_models, users_models, schemas
+from app.decorators.plants_database_decorator import plants_db
+from app.decorators.users_database_decorator import users_db
 
-@db
-def add_plant(plant: schemas.PlantAddSchema, db):
-    db_plant = models.Plant(name = plant.name, token = plant.token, user_id = plant.user_id, latitude = plant.latitude, 
+@plants_db
+def get_all_plants(plants_db):
+    return plants_db.query(plants_models.Plant).all()
+
+@plants_db
+def delete_plant(plant: plants_models.Plant, plants_db):
+    plants_db.delete(plant)
+    plants_db.flush()
+
+@plants_db
+def add_plant(plant: schemas.PlantAddSchema, plants_db):
+    db_plant = plants_models.Plant(name = plant.name, token = plant.token, user_id = plant.user_id, latitude = plant.latitude, 
                             longtitude = plant.longtitude)
-    db.add(db_plant)
-    db.flush()
+    plants_db.add(db_plant)
+    plants_db.flush()
 
-@db
-def delete_plant(plant: models.Plant, db):
-    db.delete(plant)
-    db.flush()
+@plants_db
+def delete_plant(plant: plants_models.Plant, plants_db):
+    plants_db.delete(plant)
+    plants_db.flush()
 
-@db
-def delete_user_plants(user_plants, db):
+@plants_db
+def delete_user_plants(user_plants, plants_db):
     for plant in user_plants:
-        db.delete(plant)
-    db.flush()
+        plants_db.delete(plant)
+    plants_db.flush()
 
-@db
-def get_user_plants(user_id, db):
-    return db.query(models.Plant).filter(models.Plant.user_id == user_id).all()
+@plants_db
+def get_user_plants(user_id, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.user_id == user_id).all()
 
-@db
-def get_plant(token, db):
-    return db.query(models.Plant).filter(models.Plant.token == token).first()
+@plants_db
+def get_plant(token, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.token == token).first()
 
      
 
