@@ -30,18 +30,14 @@ async def register(data: Login):
 async def login(data: Login):
     return services.login(data)
 
-@app.post('/refresh-password')
-async def refresh_password(data: Email):
-    return services.refresh_password(data)
-
 @app.post('/logout')
-async def logout(access_token: str, email: str):
-    return services.logout(access_token, email)
+async def logout(accessToken: str, email: str):
+    return services.logout(accessToken, email)
 
 @app.post('/refresh-token')
-async def refresh_token(refresh_token: str, email: str):
-    return services.refresh_token(refresh_token, email)
+async def refresh_token(refreshToken: str, email: str):
+    return services.refresh_token(refreshToken, email)
 
 @app.delete('/account')
-async def delete_account(access_token: str, email: str):
-    return services.delete_account(access_token, email)
+async def delete_account(accessToken: str, email: str):
+    return services.delete_account(accessToken, email)

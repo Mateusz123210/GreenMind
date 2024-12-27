@@ -82,10 +82,6 @@ def login(data: Login):
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 @transactional
-def refresh_password(data: Email):
-    raise HTTPException(status_code=501, detail="Not implemented yet!")
-
-@transactional
 def logout(access_token: str, email: str):
     db_user = crud.get_user_by_email(email=email)
     if db_user is None:
@@ -253,20 +249,6 @@ def delete_account(access_token: str, email: str):
     crud.delete_user(db_user)
 
     return {}
-
-@transactional
-def delete_expired_tokens():
-
-    tokens = crud.get_all_tokens()
-    
-    for token in tokens:
-
-        utc=pytz.UTC
-        datetime_now = datetime.now(UTC)
-        token_expiration_time = utc.localize(token.refresh_token_expiration_time)
-
-        if datetime_now > token_expiration_time:
-            crud.delete_token(token)
 
 def check_access_token_key(user, access_token_key):
 
