@@ -49,4 +49,4 @@ def check_permissions(access_token, email):
                 detail="Token expired",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-    return db_user
+    return db_user.uuid

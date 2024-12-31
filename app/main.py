@@ -25,41 +25,45 @@ app.add_middleware(
 )
 
 @app.get("/plant")
-def get_plant(plantId: int):
-    return {"plantId": plantId, "data": "Sample Plant Data"}
+def get_plant(plantUUID: str, access_token: str, email: str):
+    return services.get_plant(plantUUID, access_token, email)
 
 @app.post("/plant")
-def create_plant(plant: Plant):
-    return {"message": "Plant created", "plant": plant}
+def create_plant(plant: PlantAddSchema, access_token: str, email: str):
+    return services.add_plant(plant, access_token, email)
 
 @app.put("/plant")
-def update_plant(id: int, plant: Plant):
-    return {"message": "Plant updated", "id": id, "plant": plant}
+def update_plant(plant: PlantEditSchema, access_token: str, email: str):
+    return services.edit_plant(plant, access_token, email)
 
 @app.delete("/plant")
-def delete_plant(plantId: int):
-    return {"message": "Plant deleted", "plantId": plantId}
+def delete_plant(plantUUID: str, access_token: str, email: str):
+    return services.delete_plant(plantUUID, access_token, email)
 
 @app.get("/plants")
-def get_all_plants():
-    return {"plants": ["Plant1", "Plant2"]}
+def get_all_plants(access_token: str, email: str):
+    return services.get_all_plants(access_token, email)
 
-@app.get("/plantation")
-def get_plantation(plantationId: int):
-    return {"plantationId": plantationId, "data": "Sample Plantation Data"}
+# @app.get("/plantation")
+# def get_plantation(plantationId: int, access_token: str, email: str):
+#     return 
 
-@app.post("/plantation")
-def create_plantation(plantation: Plantation):
-    return {"message": "Plantation created", "plantation": plantation}
+# @app.post("/plantation")
+# def create_plantation(plantation: Plantation, access_token: str, email: str):
+#     return 
 
-@app.put("/plantation")
-def edit_plantation(id: int, plantation: Plantation):
-    return {"message": "Plantation updated", "id": id, "plantation": plantation}
+# @app.put("/plantation")
+# def edit_plantation(plantation: Plantation, access_token: str, email: str):
+#     return
 
-@app.delete("/plantation")
-def delete_plantation(plantationId: int):
-    return {"message": "Plantation deleted", "plantationId": plantationId}
+# @app.delete("/plantation")
+# def delete_plantation(plantationId: int, access_token: str, email: str):
+#     return 
 
-@app.post("/water")
-def add_watering_info(watering_info: WateringInfo):
-    return {"message": "Watering information added", "info": watering_info}
+# @app.get("/plantations")
+# def get_all_plantations(access_token: str, email: str):
+#     return 
+
+# @app.post("/water")
+# def add_watering_info(watering_info: WateringInfo, access_token: str, email: str):
+#     return 
