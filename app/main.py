@@ -44,26 +44,34 @@ def delete_plant(plantUUID: str, access_token: str, email: str):
 def get_all_plants(access_token: str, email: str):
     return services.get_all_plants(access_token, email)
 
-# @app.get("/plantation")
-# def get_plantation(plantationId: int, access_token: str, email: str):
-#     return 
+@app.get("/plantation")
+def get_plantation(plantationUUID: str, access_token: str, email: str):
+    return services.get_plantation(plantationUUID, access_token, email)
 
-# @app.post("/plantation")
-# def create_plantation(plantation: Plantation, access_token: str, email: str):
-#     return 
+@app.post("/plantation")
+def create_plantation(plantation: PlantationAddSchema, access_token: str, email: str):
+    return services.add_plantation(plantation, access_token, email)
 
-# @app.put("/plantation")
-# def edit_plantation(plantation: Plantation, access_token: str, email: str):
-#     return
+@app.put("/plantation")
+def edit_plantation(plantation: PlantationEditSchema, access_token: str, email: str):
+    return services.edit_plantation(plantation, access_token, email)
 
-# @app.delete("/plantation")
-# def delete_plantation(plantationId: int, access_token: str, email: str):
-#     return 
+@app.delete("/plantation")
+def delete_plantation(plantationUUID: str, access_token: str, email: str):
+    return services.delete_plantation(plantationUUID, access_token, email)
 
-# @app.get("/plantations")
-# def get_all_plantations(access_token: str, email: str):
-#     return 
+@app.get("/plantations")
+def get_all_plantations(access_token: str, email: str):
+    return services.get_all_plantations(access_token, email)
 
-# @app.post("/water")
-# def add_watering_info(watering_info: WateringInfo, access_token: str, email: str):
-#     return 
+@app.put("/token")
+def update_token(token: str, access_token: str, email: str):
+    return services.update_token(token, access_token, email)
+
+@app.get("/water")
+def get_watering_info(plantationUUID: str, access_token: str, email: str):
+    return services.get_watering_info(plantationUUID, access_token, email)
+
+@app.post("/water")
+def add_watering_info(watering_info: WateringInfo, access_token: str, email: str):
+    return services.add_watering_info(watering_info, access_token, email)

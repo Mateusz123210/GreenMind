@@ -21,6 +21,12 @@ def get_user_plant_by_name(user_uuid, name, plants_db):
         .first()
 
 @plants_db
+def get_user_plant_by_uuid(user_uuid, uuid, plants_db):
+    return plants_db.query(plants_models.PlantType).filter(plants_models.PlantType.user_id == user_uuid) \
+        .filter(plants_models.PlantType.uuid == uuid) \
+        .first()
+
+@plants_db
 def add_plant(name, comments, min_temperature, opt_temperature, max_temperature, min_moisture, 
               opt_moisture, max_moisture, min_illuminance, opt_illuminance, max_illuminance,
               user_id, uuid, plants_db):
@@ -52,37 +58,56 @@ def delete_plant(plant: plants_models.PlantType, plants_db):
 def get_user_plants(user_id, plants_db):
     return plants_db.query(plants_models.PlantType).filter(plants_models.PlantType.user_id == user_id).all()
 
-# @plants_db
-# def get_all_plants(plants_db):
-#     return plants_db.query(plants_models.Plant).all()
+@plants_db
+def get_plantation(uuid, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.uuid == uuid).first()
 
-# @plants_db
-# def delete_plant(plant: plants_models.Plant, plants_db):
-#     plants_db.delete(plant)
-#     plants_db.flush()
+@plants_db
+def get_plant_name(plant_uuid, plants_db):
+    return plants_db.query(plants_models.PlantType).filter(plants_models.PlantType.uuid == plant_uuid).first()
 
-# @plants_db
-# def add_plant(plant: schemas.PlantAddSchema, plants_db):
-#     db_plant = plants_models.Plant(name = plant.name, token = plant.token, user_id = plant.user_id, latitude = plant.latitude, 
-#                             longtitude = plant.longtitude)
-#     plants_db.add(db_plant)
-#     plants_db.flush()
+@plants_db
+def get_user_plantation_by_name(user_uuid, name, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.user_id == user_uuid) \
+        .filter(plants_models.Plant.name == name) \
+        .first()
 
-# @plants_db
-# def delete_plant(plant: plants_models.Plant, plants_db):
-#     plants_db.delete(plant)
-#     plants_db.flush()
-
-# @plants_db
-# def delete_user_plants(user_plants, plants_db):
-#     for plant in user_plants:
-#         plants_db.delete(plant)
-#     plants_db.flush()
-
-# @plants_db
-# def get_user_plants(user_id, plants_db):
-#     return plants_db.query(plants_models.Plant).filter(plants_models.Plant.user_id == user_id).all()
+@plants_db
+def get_plant_with_token(token, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.token == token).first()
 
 
-     
+@plants_db
+def add_plantation(name, token, user_id, plant_id,
+        latitude, longtitude, uuid, plants_db):
+    db_plantation = plants_models.Plant(name = name, token = token, user_id = user_id,
+            plant_id = plant_id, latitude = latitude, longtitude = longtitude,
+            uuid = uuid)
+    plants_db.add(db_plantation)
+    plants_db.flush()
 
+@plants_db
+def get_user_plantations(user_id, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.user_id == user_id).all()
+
+@plants_db
+def edit_plantation(plantation_uuid, edit_data, plants_db):
+
+    plants_db.query(plants_models.Plant).filter(plants_models.Plant.uuid == plantation_uuid).update(edit_data)
+
+    plants_db.flush()
+
+@plants_db
+def delete_plantation(plantation: plants_models.Plant, plants_db):
+    plants_db.delete(plantation)
+    plants_db.flush()
+
+@plants_db
+def get_user_plantation_by_token(user_uuid, token, plants_db):
+    return plants_db.query(plants_models.Plant).filter(plants_models.Plant.user_id == user_uuid) \
+        .filter(plants_models.Plant.token == token) \
+        .first()
+
+@plants_db
+def update_token(plantation_uuid, token, plants_db):
+    plants_db.query(plants_models.Plant).filter(plants_models.Plant.uuid == plantation_uuid).update({"token": token})

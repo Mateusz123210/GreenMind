@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List
 
 
 class PlantAddSchema(BaseModel):
@@ -39,30 +38,34 @@ class PlantEditSchema(BaseModel):
         from_attributes = True
 
 
-# class Plantation(BaseModel):
-#     name: str
-#     latitude: List[float] | None = None
-#     longitude: List[float] | None = None
-#     additionalInfo: List[List[str]] | None = None
+class PlantationAddSchema(BaseModel):
+    name: str
+    latitude: float
+    longtitude: float
+    plant_id: str
 
 
-#     class Config:
-#         from_attributes = True
+    class Config:
+        from_attributes = True
 
 
-# class WateringInfo(BaseModel):
-#     id: int
-#     waterAmount: float
-#     wateringTime: str
+class PlantationEditSchema(BaseModel):
+    name: str | None = None
+    latitude: float | None = None
+    longtitude: float | None = None
+    plantationUUID: str
 
 
-#     class Config:
-#         from_attributes = True
+    class Config:
+        from_attributes = True
 
 
+class WateringInfo(BaseModel):
+    plantationUUID: str
+    waterAmount: float
+    wateringTime: float
 
 
-
-
-
+    class Config:
+        from_attributes = True
 
