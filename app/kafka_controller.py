@@ -104,5 +104,6 @@ class KafkaController:
         
         else:
 
-            insert_data = {"id": id, "sensor_data": [[moisture, temperature, illuminance, timestamp, datetime.now(UTC)]]}
+            insert_data = {"id": id, "sensor_data": [[moisture, temperature, illuminance, timestamp, datetime.now(UTC)]], 
+                           "watering_info": []}
             sensors_db_collection.insert_one(insert_data)
