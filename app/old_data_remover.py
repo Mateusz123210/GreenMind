@@ -8,7 +8,8 @@ from app.mongo_predictions_database import predictions_db_collection
 from app.mongo_sensors_database import sensors_db_collection
 from app.mongo_weather_database import weather_db_collection
 from app import crud
-
+import pytz
+from datetime import datetime, UTC
 
 class OldDataRemover:
 
@@ -26,6 +27,7 @@ class OldDataRemover:
 
             if counter == self.delete_time:
                 self.delete_old_data()
+                self.delete_expired_tokens()
                 counter = 0
 
             else:
@@ -53,18 +55,22 @@ class OldDataRemover:
         
         plants_references_to_types = list(set(plants_references_to_types))
         
+        deleted_number = 0
         for index, plant in enumerate(reversed(all_plants)):
             if plant.user_id not in users_uuids:
                 crud.delete_plant(plant)
-                del all_plants[len(all_plants) - index - 1]
-                del plants_uuids[len(all_plants) - index - 1]
+                del all_plants[len(all_plants) - index - 1 + deleted_number]
+                del plants_uuids[len(all_plants) - index - 1 + deleted_number]
+                deleted_number += 1
 
         all_plants_types = crud.get_all_plants_types()
         
+        deleted_number = 0
         for index, plant_type in enumerate(reversed(all_plants_types)):
             if plant_type.user_id not in users_uuids:
                 crud.delete_plant_type(plant_type)
-                del all_plants_types[len(all_plants_types) - index - 1]
+                del all_plants_types[len(all_plants_types) - index - 1 + deleted_number]
+                deleted_number += 1
 
         sensors_data = sensors_db_collection.find()
 
@@ -107,4 +113,18 @@ class OldDataRemover:
 
         for x in to_delete:
             predictions_db_collection.delete_one({"id": x})
+    
+    @usersDBTransactional
+    def delete_expired_tokens(self):
+        all_tokens = crud.get_all_tokens()
         
+        deleted_number = 0
+        for index, token in enumerate(reversed(all_tokens)):
+            utc=pytz.UTC
+            datetime_now = datetime.now(UTC)
+            token_expiration_time = utc.localize(token.refresh_token_expiration_time)
+
+            if datetime_now > token_expiration_time:
+                crud.delete_token(token)
+                del all_tokens[len(all_tokens) - index - 1 + deleted_number]
+                deleted_number += 1

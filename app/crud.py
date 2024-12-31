@@ -23,3 +23,16 @@ def delete_plant_type(plant_type: plants_models.PlantType, plants_db):
 @users_db
 def get_all_users(users_db):
     return users_db.query(users_models.User).all()     
+
+@users_db
+def get_user_tokens(user, users_db):
+    return users_db.query(users_models.Token).filter(users_models.Token.user_id == user.uuid).all()
+
+@users_db
+def get_all_tokens(users_db):
+    return users_db.query(users_models.Token).all()
+
+@users_db
+def delete_token(token: users_models.Token, users_db):
+    users_db.delete(token)
+    users_db.flush()
