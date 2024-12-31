@@ -45,15 +45,26 @@ class OldDataRemover:
 
         all_plants = crud.get_all_plants()
         plants_uuids = []
-
+        plants_references_to_types = []
+        
         for plant in all_plants:
             plants_uuids.append(plant.uuid)
+            plants_references_to_types.append(plant.plant_id)
+        
+        plants_references_to_types = list(set(plants_references_to_types))
         
         for index, plant in enumerate(reversed(all_plants)):
             if plant.user_id not in users_uuids:
                 crud.delete_plant(plant)
                 del all_plants[len(all_plants) - index - 1]
                 del plants_uuids[len(all_plants) - index - 1]
+
+        all_plants_types = crud.get_all_plants_types()
+        
+        for index, plant_type in enumerate(reversed(all_plants_types)):
+            if plant_type.user_id not in users_uuids:
+                crud.delete_plant_type(plant_type)
+                del all_plants_types[len(all_plants_types) - index - 1]
 
         sensors_data = sensors_db_collection.find()
 
