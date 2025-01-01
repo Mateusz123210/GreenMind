@@ -35,16 +35,10 @@ class AnalysisKafkaController:
     def create_tasks(self):
         
         all_plants = crud.get_all_plants()
-        analysis_data = [{"message": "Here will be data for prediction"}]
-        
-        # for plant in all_plants:
-        #     location = [plant.latitude, plant.longtitude]
-
-        #     if location not in locations:
-        #         locations.append(location)
-
-        for data in analysis_data:            
-            self.send_message(json.dumps(data).encode("utf-8"))
+        for plant in all_plants:
+            analysis_data = [{"plantationUUID": plant.uuid, "message": "Here will be data for prediction"}]
+           
+            self.send_message(json.dumps(analysis_data).encode("utf-8"))
 
     def stop_creating_tasks(self):
 
