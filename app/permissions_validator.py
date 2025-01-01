@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
 from app import crud
 import datetime
-from app.schemas import *
 from app.decorators.users_database_decorator import usersDBTransactional
 import pytz
 from jose import jwt
@@ -50,4 +49,4 @@ def check_permissions(access_token, email):
                 detail="Token expired",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-    return db_user
+    return db_user.uuid

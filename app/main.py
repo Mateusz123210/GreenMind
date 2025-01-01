@@ -25,13 +25,17 @@ app.add_middleware(
 )
 
 @app.get("/prediction")
-def get_prediction(plantationId: int):
-    return {"plantationId": plantationId, "predictionData": {"internalConditions": ["Condition1"], "externalConditions": ["Condition2"]}}
-
+def get_prediction(plantationUUID: str, access_token: str, email: str):
+    return services.get_predictions_data(plantationUUID, access_token, email)
+    
 @app.get("/sensor-data")
-def get_sensor_data(plantationId: int):
-    return {"plantationId": plantationId, "data": "Sample Sensor Data"}
+def get_sensors_data(plantationUUID: str, access_token: str, email: str):
+    return services.get_sensors_data(plantationUUID, access_token, email)
+
+@app.get("/weather-data")
+def get_weather_data(plantationUUID: str, access_token: str, email: str):
+    return services.get_weather_data(plantationUUID, access_token, email)
 
 @app.get("/statistics")
-def get_statistics(plantationId: int):
-    return {"plantationId": plantationId, "data": "Sample Statistics Data"}
+def get_statistics(plantationUUID: str, access_token: str, email: str):
+    return services.get_statistics(plantationUUID, access_token, email)
