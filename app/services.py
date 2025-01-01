@@ -9,6 +9,9 @@ from app.decorators.mongo_sensors_decorator import mongo_sensors_transactional
 from app.mongo_sensors_database import sensors_db_collection
 import pytz
 from datetime import datetime, UTC
+from app.weather_kafka_controller import WeatherKafkaController
+
+weather_kafka_controller = WeatherKafkaController()
 
 moisture_range = (0, 100)
 temperature_range = (-100, 70)
@@ -360,6 +363,7 @@ def add_plantation(data: PlantationAddSchema, access_token, email):
         data.name, token, user_uuid, data.plant_id,
         data.latitude, data.longtitude, uuid_generator.generate_uuid()
     )
+    weather_kafka_controller.add_weather_task([data.latitude, data.longtitude])
                                   
     return Response(status_code = 200)
 
