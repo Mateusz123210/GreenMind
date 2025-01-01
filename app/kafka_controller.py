@@ -37,17 +37,7 @@ class KafkaController:
         except json.JSONDecodeError:
             return
         
-        # if len(loaded.keys()) != 4:
-        #     return
-        
-        # valid_keys = ["token", "humidity", "temperature", "light"] 
-
-        # for key in valid_keys:
-        #     if key not in loaded.keys():
-        #         return
-            
-
-        self.save_to_database(id = 2)
+        self.save_to_database(id = loaded[0]["plantationUUID"])
 
     @mongo_predictions_transactional
     def save_to_database(self, id, session):
