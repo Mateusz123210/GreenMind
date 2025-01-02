@@ -15,6 +15,11 @@ spec:
       labels:
         app: backend9
     spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
       containers:
       - name: backend9
         image: backend9:latest

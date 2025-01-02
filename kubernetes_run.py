@@ -1,6 +1,7 @@
 import os
 
 os.system("minikube addons enable ingress")
+os.system("minikube addons enable ingress-dns")
 os.system("kubectl apply -f coredns-config.yaml")
 os.system("kubectl apply -f coredns-deployment.yaml")
 os.system("kubectl apply -f fastapi-app1-deployment.yaml")
