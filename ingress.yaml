@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: green-mind-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/load-balance: "ip_hash"
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
 spec:
@@ -12,14 +11,14 @@ spec:
     http:
       paths:
       - path: /register
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /login
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend-service
