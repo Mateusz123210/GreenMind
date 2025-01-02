@@ -74,9 +74,9 @@ export const PlantCard: React.FC<Props> = ({ title, description }) => {
                         uwagi
                     </Typography>
                     <Typography variant="body2" pb={4}>{description}</Typography>
-                    <PlantSlider label="Temperatura"/>
-                    <PlantSlider label="Wilgotność"/>
-                    <PlantSlider label="Nasłonecznienie"/>
+                    <PlantSlider label="Temperatura" unit="°C"/>
+                    <PlantSlider label="Wilgotność" unit="%"/>
+                    <PlantSlider label="Nasłonecznienie" unit="lm"/>
                 </CardContent>
             </Collapse>
         </Card>
