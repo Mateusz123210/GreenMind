@@ -1,0 +1,23 @@
+#weather api service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend6
+  labels:
+    app: backend6
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend6
+  template:
+    metadata:
+      labels:
+        app: backend6
+    spec:
+      containers:
+      - name: backend6
+        image: backend6:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8002

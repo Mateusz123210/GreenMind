@@ -1,0 +1,21 @@
+import os
+
+os.system("python kubernetes_stop.py")
+
+os.system("kubectl apply -f fastapi-app1-deployment.yaml")
+os.system("kubectl apply -f fastapi-app1-service.yaml")
+os.system("kubectl apply -f fastapi-app2-deployment.yaml")
+os.system("kubectl apply -f fastapi-app2-service.yaml")
+os.system("kubectl apply -f fastapi-app3-deployment.yaml")
+os.system("kubectl apply -f fastapi-app3-service.yaml")
+os.system("kubectl apply -f fastapi-app4-deployment.yaml")
+os.system("kubectl apply -f fastapi-app4-service.yaml")
+os.system("kubectl apply -f fastapi-app5-deployment.yaml")
+os.system("kubectl apply -f fastapi-app5-service.yaml")
+os.system("kubectl apply -f fastapi-app6-deployment.yaml")
+os.system("kubectl apply -f fastapi-app6-service.yaml")
+os.system("kubectl apply -f fastapi-app7-deployment.yaml")
+os.system("kubectl apply -f fastapi-app7-service.yaml")
+os.system("kubectl apply -f fastapi-app8-deployment.yaml")
+os.system("kubectl apply -f fastapi-app8-service.yaml")
+os.system("kubectl apply -f ingress.yaml")

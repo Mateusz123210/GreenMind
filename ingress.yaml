@@ -1,0 +1,118 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: green-mind-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/load-balance: "ip_hash"
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+spec:
+  rules:
+  - host: greenmind.com
+    http:
+      paths:
+      - path: /register
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /login
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /logout
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /refresh-token
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /account
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+      - path: /plant
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /plants
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /plantation
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /plantatations
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /token
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /water
+        pathType: Prefix
+        backend:
+          service:
+            name: backend5-service
+            port:
+              number: 80
+      - path: /prediction
+        pathType: Prefix
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
+      - path: /sensor-data
+        pathType: Prefix
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
+      - path: /weather-data
+        pathType: Prefix
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
+      - path: /statistics
+        pathType: Prefix
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80

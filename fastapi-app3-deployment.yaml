@@ -1,0 +1,23 @@
+#sensors service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend2
+  labels:
+    app: backend2
+spec:
+  replicas: 7
+  selector:
+    matchLabels:
+      app: backend2
+  template:
+    metadata:
+      labels:
+        app: backend2
+    spec:
+      containers:
+      - name: backend2
+        image: backend2:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8003

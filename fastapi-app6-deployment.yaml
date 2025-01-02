@@ -1,0 +1,23 @@
+#data quering service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend4
+  labels:
+    app: backend4
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: backend4
+  template:
+    metadata:
+      labels:
+        app: backend4
+    spec:
+      containers:
+      - name: backend4
+        image: backend4:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8006

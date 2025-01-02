@@ -1,0 +1,23 @@
+#old data remover service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend11
+  labels:
+    app: backend11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend11
+  template:
+    metadata:
+      labels:
+        app: backend11
+    spec:
+      containers:
+      - name: backend11
+        image: backend11:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8008

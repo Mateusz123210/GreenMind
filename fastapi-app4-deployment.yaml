@@ -1,0 +1,23 @@
+#analysis service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend3
+  labels:
+    app: backend3
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: backend3
+  template:
+    metadata:
+      labels:
+        app: backend3
+    spec:
+      containers:
+      - name: backend3
+        image: backend3:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8004

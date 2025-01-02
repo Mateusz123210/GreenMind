@@ -1,0 +1,23 @@
+#scheduler service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend9
+  labels:
+    app: backend9
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend9
+  template:
+    metadata:
+      labels:
+        app: backend9
+    spec:
+      containers:
+      - name: backend9
+        image: backend9:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8001
