@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns
+  namespace: kube-system
+spec:
+  replicas: 2  # You can adjust the replica count based on your needs
+  selector:
+    matchLabels:
+      k8s-app: coredns
+  template:
+    metadata:
+      labels:
+        k8s-app: coredns
+    spec:
+      containers:
+      - name: coredns
+        image: coredns/coredns:latest
+        resources:
+          requests:
+            memory: 70Mi
+            cpu: 100m
+          limits:
+            memory: 170Mi
+            cpu: 250m
+        ports:
+        - containerPort: 53
+          protocol: UDP
+        - containerPort: 53
+          protocol: TCP
+        volumeMounts:
+        - name: coredns-config
+          mountPath: /etc/coredns
+          readOnly: true
+      volumes:
+      - name: coredns-config
+        configMap:
+          name: coredns
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coredns
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: coredns
+  ports:
+    - protocol: TCP
+      port: 53
+      targetPort: 53
+  clusterIP: 10.96.0.10
+  # The default IP for the Kubernetes DNS service

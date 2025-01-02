@@ -12,38 +12,38 @@ spec:
     http:
       paths:
       - path: /register
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
-            name: backend
+            name: backend-service
             port:
               number: 80
       - path: /login
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
-            name: backend
+            name: backend-service
             port:
               number: 80
       - path: /logout
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
-            name: backend
+            name: backend-service
             port:
               number: 80
       - path: /refresh-token
         pathType: Prefix
         backend:
           service:
-            name: backend
+            name: backend-service
             port:
               number: 80
       - path: /account
         pathType: Prefix
         backend:
           service:
-            name: backend
+            name: backend-service
             port:
               number: 80
       - path: /plant

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health
+        ready
+        log
+        forward . 8.8.8.8
+        cache 30
+        loop
+        reload
+        bind 0.0.0.0
+
+        pods insecure
+        prometheus :9153
+    }
