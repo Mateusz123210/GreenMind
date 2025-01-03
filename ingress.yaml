@@ -28,7 +28,7 @@ spec:
             port:
               number: 80
       - path: /logout
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend-service
@@ -49,28 +49,28 @@ spec:
             port:
               number: 80
       - path: /plant
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /plants
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /plantation
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /plantations
-        pathType: Exact
+        pathType: Prefix
         backend:
           service:
             name: backend5-service
