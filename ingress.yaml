@@ -13,6 +13,13 @@ spec:
   - host: greenmind.com
     http:
       paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: frontend1-service
+            port:
+              number: 80
       - path: /register
         pathType: Prefix
         backend:

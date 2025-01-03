@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend1
+  labels:
+    app: frontend1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend1
+  template:
+    metadata:
+      labels:
+        app: frontend1
+    spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
+      containers:
+      - name: frontend1
+        image: kubregistry1.azurecr.io/frontend1:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+      imagePullSecrets: 
+        - name: kubernetessecretname
