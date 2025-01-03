@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  serviceName: "kafka"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: wurstmeister/kafka:latest
+          env:
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "kafka://10.10.10.10:9093"  # Set your static IP here
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL
+              value: "PLAINTEXT"
+            - name: KAFKA_LISTENER_PORT
+              value: "9093"
+            - name: KAFKA_LISTENERS
+              value: "PLAINTEXT://0.0.0.0:9093"
+            - name: KAFKA_LISTENER_NAMES
+              value: "PLAINTEXT"
+          ports:
+            - containerPort: 9093

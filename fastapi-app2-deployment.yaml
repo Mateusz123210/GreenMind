@@ -22,7 +22,9 @@ spec:
           - 8.8.4.4
       containers:
       - name: backend6
-        image: backend6:latest
+        image: kubregistry1.azurecr.io/backend6:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8002
+      imagePullSecrets: 
+        - name: kubernetessecretname
