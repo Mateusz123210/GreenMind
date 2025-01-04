@@ -13,7 +13,7 @@ class KafkaController:
         self.latitude_range = (0, 100)
         self.longtitude_range = (-100, 70)
         self.illuminance_range = (0, 100000)
-        self.consumer = KafkaConsumer('weather-fetch', bootstrap_servers=['20.254.227.50:9092'], 
+        self.consumer = KafkaConsumer('weather-fetch', bootstrap_servers=['20.215.41.25:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
         self.consuming = True
 
