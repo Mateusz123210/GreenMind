@@ -30,14 +30,14 @@ async def register(data: Login):
 async def login(data: Login):
     return services.login(data)
 
-@app.post('/logout')
+@app.post('/api/logout')
 async def logout(accessToken: str, email: str):
     return services.logout(accessToken, email)
 
-@app.post('/refresh-token')
+@app.post('/api/refresh-token')
 async def refresh_token(refreshToken: str, email: str):
     return services.refresh_token(refreshToken, email)
 
-@app.delete('/account')
+@app.delete('/api/account')
 async def delete_account(accessToken: str, email: str):
     return services.delete_account(accessToken, email)
