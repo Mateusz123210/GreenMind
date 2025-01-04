@@ -24,6 +24,6 @@ spec:
         image: kubregistry1.azurecr.io/frontend1:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
+        - containerPort: 3000
       imagePullSecrets: 
         - name: kubernetessecretname

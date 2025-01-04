@@ -20,105 +20,105 @@ spec:
             name: frontend1-service
             port:
               number: 80
-      - path: /register
+      - path: /api/register
         pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
-      - path: /login
+      - path: /api/login
         pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
-      - path: /logout
+      - path: /api/logout
         pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
-      - path: /refresh-token
+      - path: /api/refresh-token
         pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
-      - path: /account
+      - path: /api/account
         pathType: Prefix
         backend:
           service:
             name: backend-service
             port:
               number: 80
-      - path: /plant
+      - path: /api/plant
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /plants
+      - path: /api/plants
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /plantation
+      - path: /api/plantation
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /plantations
+      - path: /api/plantations
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /token
+      - path: /api/token
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /water
+      - path: /api/water
         pathType: Prefix
         backend:
           service:
             name: backend5-service
             port:
               number: 80
-      - path: /prediction
+      - path: /api/prediction
         pathType: Prefix
         backend:
           service:
             name: backend4-service
             port:
               number: 80
-      - path: /sensor-data
+      - path: /api/sensor-data
         pathType: Prefix
         backend:
           service:
             name: backend4-service
             port:
               number: 80
-      - path: /weather-data
+      - path: /api/weather-data
         pathType: Prefix
         backend:
           service:
             name: backend4-service
             port:
               number: 80
-      - path: /statistics
+      - path: /api/statistics
         pathType: Prefix
         backend:
           service:
