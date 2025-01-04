@@ -9,6 +9,10 @@ metadata:
     # nginx.ingress.kubernetes.io/upstream-hash-by: "$binary_remote_addr"
 spec:
   ingressClassName: "webapprouting.kubernetes.azure.com"
+  tls:
+    - hosts:
+        - greenmind.com
+      secretName: greenmindsslsecret
   rules:
   - host: greenmind.com
     http:
@@ -21,105 +25,105 @@ spec:
             port:
               number: 80
       - path: /api/register
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /api/login
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /api/logout
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /api/refresh-token
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /api/account
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend-service
             port:
               number: 80
       - path: /api/plant
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/plants
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/plantation
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/plantations
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/token
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/water
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend5-service
             port:
               number: 80
       - path: /api/prediction
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend4-service
             port:
               number: 80
       - path: /api/sensor-data
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend4-service
             port:
               number: 80
       - path: /api/weather-data
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend4-service
             port:
               number: 80
       - path: /api/statistics
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: backend4-service

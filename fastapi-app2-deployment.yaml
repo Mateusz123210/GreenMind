@@ -23,7 +23,7 @@ spec:
       containers:
       - name: backend6
         image: kubregistry1.azurecr.io/backend6:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8002
       imagePullSecrets: 

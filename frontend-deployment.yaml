@@ -22,7 +22,7 @@ spec:
       containers:
       - name: frontend1
         image: kubregistry1.azurecr.io/frontend1:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
       imagePullSecrets: 
