@@ -6,9 +6,6 @@ from app.schemas import *
 from app import services
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi import Request, HTTPException
-from fastapi.responses import PlainTextResponse
-
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
