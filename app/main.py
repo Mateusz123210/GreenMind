@@ -24,54 +24,54 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/plant")
+@app.get("/api/plant")
 def get_plant(plantUUID: str, access_token: str, email: str):
     return services.get_plant(plantUUID, access_token, email)
 
-@app.post("/plant")
+@app.post("/api/plant")
 def create_plant(plant: PlantAddSchema, access_token: str, email: str):
     return services.add_plant(plant, access_token, email)
 
-@app.put("/plant")
+@app.put("/api/plant")
 def update_plant(plant: PlantEditSchema, access_token: str, email: str):
     return services.edit_plant(plant, access_token, email)
 
-@app.delete("/plant")
+@app.delete("/api/plant")
 def delete_plant(plantUUID: str, access_token: str, email: str):
     return services.delete_plant(plantUUID, access_token, email)
 
-@app.get("/plants")
+@app.get("/api/plants")
 def get_all_plants(access_token: str, email: str):
     return services.get_all_plants(access_token, email)
 
-@app.get("/plantation")
+@app.get("/api/plantation")
 def get_plantation(plantationUUID: str, access_token: str, email: str):
     return services.get_plantation(plantationUUID, access_token, email)
 
-@app.post("/plantation")
+@app.post("/api/plantation")
 def create_plantation(plantation: PlantationAddSchema, access_token: str, email: str):
     return services.add_plantation(plantation, access_token, email)
 
-@app.put("/plantation")
+@app.put("/api/plantation")
 def edit_plantation(plantation: PlantationEditSchema, access_token: str, email: str):
     return services.edit_plantation(plantation, access_token, email)
 
-@app.delete("/plantation")
+@app.delete("/api/plantation")
 def delete_plantation(plantationUUID: str, access_token: str, email: str):
     return services.delete_plantation(plantationUUID, access_token, email)
 
-@app.get("/plantations")
+@app.get("/api/plantations")
 def get_all_plantations(access_token: str, email: str):
     return services.get_all_plantations(access_token, email)
 
-@app.put("/token")
+@app.put("/api/token")
 def update_token(token: str, access_token: str, email: str):
     return services.update_token(token, access_token, email)
 
-@app.get("/water")
+@app.get("/api/water")
 def get_watering_info(plantationUUID: str, access_token: str, email: str):
     return services.get_watering_info(plantationUUID, access_token, email)
 
-@app.post("/water")
+@app.post("/api/water")
 def add_watering_info(watering_info: WateringInfo, access_token: str, email: str):
     return services.add_watering_info(watering_info, access_token, email)
