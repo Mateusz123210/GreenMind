@@ -24,18 +24,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/prediction")
+@app.get("/api/prediction")
 def get_prediction(plantationUUID: str, access_token: str, email: str):
     return services.get_predictions_data(plantationUUID, access_token, email)
     
-@app.get("/sensor-data")
+@app.get("/api/sensor-data")
 def get_sensors_data(plantationUUID: str, access_token: str, email: str):
     return services.get_sensors_data(plantationUUID, access_token, email)
 
-@app.get("/weather-data")
+@app.get("/api/weather-data")
 def get_weather_data(plantationUUID: str, access_token: str, email: str):
     return services.get_weather_data(plantationUUID, access_token, email)
 
-@app.get("/statistics")
+@app.get("/api/statistics")
 def get_statistics(plantationUUID: str, access_token: str, email: str):
     return services.get_statistics(plantationUUID, access_token, email)
