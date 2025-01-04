@@ -11,7 +11,7 @@ class AnalysisKafkaController:
     def __init__(self):
 
         self.analysis_start_time = 30000
-        self.producer = Producer({"bootstrap.servers": "20.254.227.50:9092"})
+        self.producer = Producer({"bootstrap.servers": "20.215.41.25:9092"})
         self.working = True
         self.delivery_report = None
 
