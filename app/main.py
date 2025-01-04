@@ -6,6 +6,9 @@ from app.schemas import *
 from app import services
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi import Request, HTTPException
+from fastapi.responses import PlainTextResponse
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -22,11 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post('/register')
+@app.post('/api/register')
 async def register(data: Login):
     return services.register(data)
 
-@app.post('/login')
+@app.post('/api/login')
 async def login(data: Login):
     return services.login(data)
 
