@@ -10,7 +10,7 @@ class KafkaController:
 
     def __init__(self):
 
-        self.consumer = KafkaConsumer('analysis-start', bootstrap_servers=['20.254.227.50:9092'], 
+        self.consumer = KafkaConsumer('analysis-start', bootstrap_servers=['20.215.41.25:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
 
     def consume(self):
