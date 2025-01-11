@@ -118,7 +118,7 @@ class AnalysisKafkaController:
                         "max_illuminance": plant_type.max_illuminance
                     }
                     task["plant_requirements"] = plant_requirements
-                    
+                    task["uuid"] = plant.uuid
                     self.send_message(json.dumps(task).encode("utf-8"))                    
                 
                 else:
