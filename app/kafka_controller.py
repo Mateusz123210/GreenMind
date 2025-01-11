@@ -10,7 +10,7 @@ class KafkaController:
 
     def __init__(self):
 
-        self.consumer = KafkaConsumer('analysis-start', bootstrap_servers=['20.215.41.25:9092'], 
+        self.consumer = KafkaConsumer('analysis-start', bootstrap_servers=['40.113.165.28:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
 
     def consume(self):
@@ -33,26 +33,34 @@ class KafkaController:
         try:
 
             loaded = json.loads(message.replace("'", '"'))
-
+                
         except json.JSONDecodeError:
             return
         
-        self.save_to_database(id = loaded[0]["plantationUUID"])
+        print(loaded)
+        print(loaded["uuid"])
+
+        new_prediction_data = {"Ile podlać": "2 litry", "kiedy": "jutro"}
+        #do prediction
+        #prediction=do_prediction(loaded)
+
+        
+    
+        self.save_to_database(id = loaded["uuid"], new_prediction_data = new_prediction_data)
 
     @mongo_predictions_transactional
-    def save_to_database(self, id, session):
+    def save_to_database(self, id, new_prediction_data, session):
         prediction = predictions_db_collection.find_one({"id": id}, session=session)
 
         if prediction:
 
             prediction_data = prediction["prediction_data"]
 
-            # if len(prediction_data) > self.max_measurements_number:
-            #     del prediction_data[0]
+            if len(prediction_data) > 0:
+                del prediction_data[0]
             
             utc=pytz.UTC
-            # prediction_data.append([humidity, temperature, light, datetime.now(UTC)])
-            prediction_data = [["Here will be some prediction", datetime.now(UTC)]]
+            prediction_data = [[new_prediction_data, datetime.now(UTC)]]
 
             filter = { '_id': prediction["_id"] }
             new_values = { "$set": { 'prediction_data': prediction_data } }
@@ -61,5 +69,5 @@ class KafkaController:
         
         else:
             utc=pytz.UTC
-            insert_data = {"id": id, "prediction_data": [["Here will be some prediction", datetime.now(UTC)]]}
+            insert_data = {"id": id, "prediction_data": [[new_prediction_data, datetime.now(UTC)]]}
             predictions_db_collection.insert_one(insert_data)
