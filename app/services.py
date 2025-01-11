@@ -1,27 +1,20 @@
 import requests
+from datetime import timedelta, datetime, UTC
 
-def get_weather_forecast(location_lat, location_lon, date):
-    """
-    Fetch the weather forecast for a specific location and date using Open-Meteo API.
-    
-    Args:
-        location_lat (float): Latitude of the location.
-        location_lon (float): Longitude of the location.
-        date (str): The date for the forecast in 'YYYY-MM-DD' format.
-        
-    Returns:
-        dict: Weather forecast details if successful, or an error message.
-    """
+def get_weather_forecast_for_hour(location_lat, location_lon, startdate):
     try:
         # Base URL for Open-Meteo API
         base_url = "https://api.open-meteo.com/v1/forecast"
-        
+
+        end_date = (datetime.strptime(startdate, "%Y-%m-%d") + timedelta(days=14)).date()
         # Define query parameters
         params = {
             "latitude": location_lat,
             "longitude": location_lon,
-            "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum",
-            "timezone": "auto"  # Automatically adjust timezone based on location
+            "start_date": startdate,
+            "end_date": end_date,
+            "hourly": "temperature_2m,precipitation,uv_index",
+            "timezone": "auto"  
         }
         
         # Make the API request
@@ -32,24 +25,24 @@ def get_weather_forecast(location_lat, location_lon, date):
         weather_data = response.json()
         
         # Extract daily forecasts
-        daily_data = weather_data.get("daily", {})
-        dates = daily_data.get("time", [])
-        max_temps = daily_data.get("temperature_2m_max", [])
-        min_temps = daily_data.get("temperature_2m_min", [])
-        precipitations = daily_data.get("precipitation_sum", [])
+        hourly_data = weather_data.get("hourly", {})
+        times = hourly_data.get("time", [])
+        temperatures = hourly_data.get("temperature_2m", [])
+        precipitations = hourly_data.get("precipitation", [])
+        uv_indexes = hourly_data.get("uv_index", [])
         
-        # Find the index of the requested date
-        if date in dates:
-            index = dates.index(date)
-            return {
-                "date": date,
-                "max_temp": max_temps[index],
-                "min_temp": min_temps[index],
-                "precipitation": precipitations[index]
+        # Combine the data into a list of dictionaries
+        forecast = [
+            {
+                "time": times[i],
+                "temperature": temperatures[i],
+                "precipitation": precipitations[i],
+                "uv_index": uv_indexes[i]
             }
-        
-        # If the date is not found in the response
-        return {"error": "No forecast available for the specified date."}
-    
+            for i in range(len(times))
+        ]
+
+        return forecast
+
     except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
+        return None

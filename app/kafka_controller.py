@@ -13,7 +13,7 @@ class KafkaController:
         self.latitude_range = (0, 100)
         self.longtitude_range = (-100, 70)
         self.illuminance_range = (0, 100000)
-        self.consumer = KafkaConsumer('weather-fetch', bootstrap_servers=['20.215.41.25:9092'], 
+        self.consumer = KafkaConsumer('weather-fetch', bootstrap_servers=['40.113.165.28:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
         self.consuming = True
 
@@ -74,15 +74,15 @@ class KafkaController:
 
         if current_time > time + 3600:
             return
+        weather = services.get_weather_forecast_for_hour(latitude, longtitude, datetime.now().strftime('%Y-%m-%d'))
+        if weather is None:
+            return
         
-        weather = services.get_weather_forecast(latitude, longtitude, datetime.now().strftime('%Y-%m-%d'))
-
-        self.add_to_database(latitude, longtitude, weather["date"], weather["max_temp"], weather["min_temp"], 
-                             weather["precipitation"])
+        self.add_to_database(latitude, longtitude, weather)
 
 
     @mongo_weather_transactional
-    def add_to_database(self, latitude, longtitude, date, max_temp, min_temp, precipitation, session):
+    def add_to_database(self, latitude, longtitude, weather, session):
 
         db_key = str(latitude) + "_" + str(longtitude)
         weather_fetched = weather_db_collection.find_one({"location": db_key}, session=session)
@@ -90,8 +90,10 @@ class KafkaController:
         if weather_fetched:
 
             weather_data = weather_fetched["weather_data"]
+            if (len(weather_data)>0):
+                del weather_data[0]
             utc = pytz.UTC
-            weather_data = [date, max_temp, min_temp, precipitation, datetime.now(UTC)]
+            weather_data = [weather, datetime.now(UTC)]
 
             filter = { '_id': weather_fetched["_id"] }
             new_values = { "$set": { 'weather_data': [weather_data] } }
@@ -100,5 +102,5 @@ class KafkaController:
 
         else:
             
-            insert_data = {"location": db_key, "weather_data": [[date, max_temp, min_temp, precipitation, datetime.now(UTC)]]}
+            insert_data = {"location": db_key, "weather_data": [[weather, datetime.now(UTC)]]}
             weather_db_collection.insert_one(insert_data)
