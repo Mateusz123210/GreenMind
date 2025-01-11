@@ -14,7 +14,7 @@ class KafkaController:
         self.temperature_range = (-100, 70)
         self.illuminance_range = (0, 100000)
         self.max_measurements_number = 527040 #60 x 24 x 366
-        self.consumer = KafkaConsumer('plants-info', bootstrap_servers=['20.254.227.50:9092'], 
+        self.consumer = KafkaConsumer('plants-info', bootstrap_servers=['50.85.212.131:9092'], 
                          auto_offset_reset='earliest', group_id = "group1")
         self.consuming = True
 
