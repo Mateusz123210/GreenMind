@@ -12,7 +12,7 @@ NUMBER_OF_MESSAGES_TO_SEND = 5
 
 if __name__ == "__main__":
     #for first sensors device 
-    token = "jGFuzDrYkEqXr7ucOlQeHTwVAAVF0wmFR9RghZiPzj7heuaFqyM4ofEi2pxJWtVi"
+    token = "1735684275820034ZWNFZGNXTlg2Vzl2T0xuUFNPa3JZZk9OcHpQUVlRb3JYOEpTa0RDeUJka1VsUDZ3"
     #for second sensors device
     # token = "2QB9k2YHmibrLYbrgLLiUqxjWTi3JfrCIMiZtkEibW3yZAp6Xoqy8EKDyPi61RtS"
 
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     light_sensor = MockLightSensor()
 
     kafka_connector = KafkaConnector(
-        "20.254.227.50:9092",
+        "50.85.212.131:9092",
         command_callbacks={},
     )
 
