@@ -25,9 +25,16 @@ class KafkaController:
     def stop_consuming(self):
         self.consumer.close()
 
+    def average_moisture(data):
+        if not data or not all(isinstance(sublist, list) and sublist for sublist in data):
+          raise ValueError("Input data must be a list of non-empty lists.")
+
+        first_positions = [sublist[0] for sublist in data]
+        return sum(first_positions) / len(first_positions)
+
 
     def handle_task(self, message: str):
-
+        print('aaa')
         loaded = None
 
         try:
@@ -39,6 +46,15 @@ class KafkaController:
         
         print(loaded)
         print(loaded["uuid"])
+
+        weather_data=loaded['weather_data']
+
+        
+
+        # Example usage:
+        sensors_data= loaded['sensors_data']
+        result = average_moisture(sensors_data)
+        print(f"Average of first positions: {result}")
 
         new_prediction_data = {"Ile podlać": "2 litry", "kiedy": "jutro"}
         #do prediction
