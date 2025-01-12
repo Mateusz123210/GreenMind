@@ -99,7 +99,8 @@ class AnalysisKafkaController:
                     
                     
                     datetime_now = datetime.now(UTC)
-                    last_fetch_time = utc.localize(weather_data[0][1])
+                    #print(weather_data[0][1])
+                    last_fetch_time = datetime.fromisoformat(weather_data[0][1])
                     if last_fetch_time < datetime_now - timedelta(days=1):
                         return 
 
