@@ -39,3 +39,17 @@ def get_weather_data(plantationUUID: str, access_token: str, email: str):
 @app.get("/api/statistics")
 def get_statistics(plantationUUID: str, access_token: str, email: str):
     return services.get_statistics(plantationUUID, access_token, email)
+
+#Server events
+
+@app.get("/api/sensors")
+def get_actual_sensors_data(plantationUUID: str, access_token: str, email: str):
+    return services.get_actual_sensors_data(plantationUUID, access_token, email)
+
+@app.get("/api/weather")
+def get_actual_weathers_data(plantationUUID: str, access_token: str, email: str):
+    return services.get_actual_weather_data(plantationUUID, access_token, email)
+
+@app.get("/api/predictions")
+def get_actual_predictions_data(plantationUUID: str, access_token: str, email: str):
+    return services.get_actual_predictions_data(plantationUUID, access_token, email)
