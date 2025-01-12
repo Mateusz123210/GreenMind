@@ -93,7 +93,7 @@ class KafkaController:
             if (len(weather_data)>0):
                 del weather_data[0]
             utc = pytz.UTC
-            weather_data = [weather, datetime.now(UTC)]
+            weather_data = [weather, str(datetime.now(UTC))]
 
             filter = { '_id': weather_fetched["_id"] }
             new_values = { "$set": { 'weather_data': [weather_data] } }
