@@ -4,6 +4,16 @@ from datetime import datetime, UTC
 import pytz
 from app.decorators.mongo_predictions_decorator import mongo_predictions_transactional
 from app.mongo_predictions_database import predictions_db_collection
+import pandas as pd
+import pickle
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.base import BaseEstimator, TransformerMixin
+import sklearn
+import os
+from app.prediction_service import average_moisture, predict_moisture_drop
+
+
 
 
 class KafkaController:
@@ -25,13 +35,6 @@ class KafkaController:
     def stop_consuming(self):
         self.consumer.close()
 
-    def average_moisture(data):
-        if not data or not all(isinstance(sublist, list) and sublist for sublist in data):
-          raise ValueError("Input data must be a list of non-empty lists.")
-
-        first_positions = [sublist[0] for sublist in data]
-        return sum(first_positions) / len(first_positions)
-
 
     def handle_task(self, message: str):
         print('aaa')
@@ -44,24 +47,33 @@ class KafkaController:
         except json.JSONDecodeError:
             return
         
-        print(loaded)
-        print(loaded["uuid"])
-
-        weather_data=loaded['weather_data']
-
+        #print(loaded)
+        #print(loaded["uuid"])
         
-
+        weather_data=loaded['weather_data']
+        # Convert weather data to a DataFrame
+        weather_df = pd.DataFrame(weather_data)
+        weather_df=weather_df.rename(columns={"temperature": "temperature_2m", "time": "hour"})
+        opt_moisture_level =loaded['plant_requirements']['opt_moisture']
         # Example usage:
         sensors_data= loaded['sensors_data']
-        result = average_moisture(sensors_data)
-        print(f"Average of first positions: {result}")
+        start_moisture_level = average_moisture(sensors_data)
+        print(f"Average of first positions: {start_moisture_level}")
+        try:
+            __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-        new_prediction_data = {"Ile podlać": "2 litry", "kiedy": "jutro"}
-        #do prediction
-        #prediction=do_prediction(loaded)
+            with open(os.path.join(__location__, 'model.pkl'), 'rb') as model_file:
+                model_pipeline = pickle.load(model_file)
 
-        
-    
+            
+            result = predict_moisture_drop(model_pipeline, weather_df, start_moisture_level, opt_moisture_level)
+            print(result)
+            new_prediction_data={}
+            new_prediction_data["predicted_watering_time"] = result
+        except Exception as e:
+            print(e)
+            return 
+
         self.save_to_database(id = loaded["uuid"], new_prediction_data = new_prediction_data)
 
     @mongo_predictions_transactional
