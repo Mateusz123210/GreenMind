@@ -7,7 +7,8 @@ import { Box, Button, LinearProgress, Stack, TextField, Typography } from "@mui/
 import useSWR from "swr";
 
 export default function Page() {
-    const { data: plants, isLoading, mutate } = useSWR<Plant[]>("/api/plants", jsonFetcher);
+    const { data: plantsRes, isLoading, mutate } = useSWR<{plants: Plant[]}>("/api/plants", jsonFetcher);
+    const plants = plantsRes?.plants
     console.log("plant:")
     console.log(plants)
     return (
@@ -28,13 +29,13 @@ export default function Page() {
                     });
 
                     mutate(postBackend("/api/plant", newObject) as any, {
-                        optimisticData: [
+                        optimisticData: { plants: [
                             ...plants!,
                             Object.assign(data, {
-                                id: Math.random() + "",
+                                uuid: Math.random() + "",
                                 description: data.comments,
                             }),
-                        ],
+                        ]},
                     });
                 }}
             >
@@ -51,14 +52,12 @@ export default function Page() {
                         id={""}
                         key={""}
                         title={"dupa"}
-                        description={"dupskodupsko"}
                     />
                 {plants instanceof Array && plants?.map((plant) => (
                     <PlantCard
-                        id={plant.id}
-                        key={plant.id}
+                        id={plant.uuid}
+                        key={plant.uuid}
                         title={plant.name}
-                        description={plant.description}
                     />
                 ))}
             </Stack>

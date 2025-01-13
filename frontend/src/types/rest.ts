@@ -1,7 +1,7 @@
 export interface Plant {
-    id: string;
+    uuid: string;
     name: string;
-    description: string;
+    // description: string;
 }
 
 export interface PlantConfig {

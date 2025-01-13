@@ -54,7 +54,6 @@ type SliderType = "temperature" | "moisture" | "illuminance";
 
 interface Props {
     title: string;
-    description: string;
     id: string;
 }
 const dupaFetcher = (...args: any) => Promise.resolve({
@@ -70,7 +69,7 @@ const dupaFetcher = (...args: any) => Promise.resolve({
     opt_moisture: 4,
     opt_temperature: 4
 } satisfies PlantConfig)
-export const PlantCard: React.FC<Props> = ({ title, description, id }) => {
+export const PlantCard: React.FC<Props> = ({ title, id }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {
         data: plantConfig,
@@ -136,7 +135,7 @@ export const PlantCard: React.FC<Props> = ({ title, description, id }) => {
                         <CardContent>
                             <Typography variant="h6">uwagi</Typography>
                             <Typography variant="body2" pb={4}>
-                                {description}
+                                {plantConfig.comments}
                             </Typography>
                             <PlantSlider
                                 label="Temperatura"
