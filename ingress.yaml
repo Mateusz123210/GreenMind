@@ -12,7 +12,7 @@ spec:
   tls:
     - hosts:
         - greenmind.com
-      secretName: greenmindsslsecret
+      secretName: my-tls-secret
   rules:
   - host: greenmind.com
     http:

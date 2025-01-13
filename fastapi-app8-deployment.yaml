@@ -22,7 +22,7 @@ spec:
           - 8.8.4.4
       containers:
       - name: backend11
-        image: kubregistry1.azurecr.io/backend11:latest
+        image: kubregistry2.azurecr.io/backend11:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8008
