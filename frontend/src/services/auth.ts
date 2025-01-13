@@ -59,7 +59,7 @@ export const login = (email: string, password: string) => {
         .then(guardResOk)
         .then((res) => res.json())
         .then((data) => {
-            localStorage.setItem("email", data.email);
+            localStorage.setItem("email", email);
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("refresh_token", data.refresh_token);
         });
