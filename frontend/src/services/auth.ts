@@ -74,11 +74,18 @@ export const refreshTokens = () => {
     })
         .then(guardResOk)
         .then((res) => res.json())
-        .then();
+        .then((data) => {
+            updateStorage("email", data.email);
+            updateStorage("access_token", data.access_token);
+            updateStorage("refresh_token", data.refresh_token);
+        });
 };
 
 export const logout = () => {
-    fetchBackend("/api/logout", { method: "POST" });
+    const url = new URL("/api/logout");
+    url.searchParams.append("refresh_token", localStorage.getItem("refresh_token")!);
+    url.searchParams.append("email", localStorage.getItem("email")!);
+    fetch("/api/logout", { method: "POST" });
     localStorage.clear();
     window.dispatchEvent(new Event("storage"));
 };
