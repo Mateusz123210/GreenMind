@@ -4,7 +4,7 @@ import os
 # os.system("minikube addons enable ingress-dns")
 # os.system("kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml")
 os.system("kubectl apply -f coredns-config.yaml")
-os.system("kubectl apply -f coredns-deployment.yaml")
+# os.system("kubectl apply -f coredns-deployment.yaml")
 # os.system("kubectl apply -f kafka-deployment.yaml")
 # os.system("kubectl wait --for=condition=ready pod/kafka-deployment")
 # os.system("kubectl apply -f kafka-service.yaml")

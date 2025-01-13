@@ -12,7 +12,7 @@ spec:
   tls:
     - hosts:
         - greenmind.com
-      secretName: greenmindsslsecret
+      secretName: my-tls-secret
   rules:
   - host: greenmind.com
     http:
@@ -123,27 +123,6 @@ spec:
             port:
               number: 80
       - path: /api/statistics
-        pathType: Exact
-        backend:
-          service:
-            name: backend4-service
-            port:
-              number: 80
-      - path: /api/sensors
-        pathType: Exact
-        backend:
-          service:
-            name: backend4-service
-            port:
-              number: 80
-      - path: /api/weather
-        pathType: Exact
-        backend:
-          service:
-            name: backend4-service
-            port:
-              number: 80
-      - path: /api/predictions
         pathType: Exact
         backend:
           service:
