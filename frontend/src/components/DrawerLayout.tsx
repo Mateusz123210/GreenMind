@@ -5,7 +5,6 @@ import contentMovedByDrawer from "@/styles/contentMovedByDrawer";
 import {
     AppBar,
     Box,
-    Button,
     Divider,
     Drawer,
     IconButton,
@@ -19,12 +18,14 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavigationListItem from "./NavigationListItem";
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import SensorsIcon from '@mui/icons-material/Sensors';
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import SensorsIcon from "@mui/icons-material/Sensors";
 // import YardIcon from '@mui/icons-material/Yard';
-import GrassIcon from '@mui/icons-material/Grass';
-import FenceIcon from '@mui/icons-material/Fence';
+import GrassIcon from "@mui/icons-material/Grass";
+import FenceIcon from "@mui/icons-material/Fence";
+import { LoginButton } from "./LoginButton";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Props extends PropsWithChildren {
     pageTitle?: string;
@@ -32,12 +33,11 @@ interface Props extends PropsWithChildren {
     center?: boolean;
 }
 
-export const DrawerLayout: React.FC<Props> = ({
-    children,
-    pageTitle = "GreenMind",
-}) => {
+export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind" }) => {
     const isDesktop = useMediaQuery((t: Theme) => t.breakpoints.up("md"));
     const [isDrawerOpen, setDrawerOpen] = useState<boolean>(isDesktop);
+    const email = useLocalStorage("email");
+    const loggedIn = Boolean(email);
 
     return (
         <>
@@ -60,11 +60,7 @@ export const DrawerLayout: React.FC<Props> = ({
                     <Typography variant="h4" component="h1">
                         {pageTitle}
                     </Typography>
-                    {/* {loggedIn ? <UserInfo /> : SignIn} */}
-
-                    <Button variant="contained" color="secondary" onClick={() => /*TODO */ {}}>
-                        Zaloguj
-                    </Button>
+                    {loggedIn ? email : <LoginButton />}
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -81,15 +77,25 @@ export const DrawerLayout: React.FC<Props> = ({
                 </Toolbar>
                 <Divider />
                 <List disablePadding>
-                    <NavigationListItem href="plants" icon={<GrassIcon/>}>Rośliny</NavigationListItem>
+                    <NavigationListItem href="plants" icon={<GrassIcon />}>
+                        Rośliny
+                    </NavigationListItem>
                     <Divider variant="middle" />
-                    <NavigationListItem href="plantation" icon={<FenceIcon/>}>Hodowla</NavigationListItem>
+                    <NavigationListItem href="plantation" icon={<FenceIcon />}>
+                        Hodowla
+                    </NavigationListItem>
                     <Divider variant="middle" />
-                    <NavigationListItem href="sensors" icon={<SensorsIcon/>}>Sensory</NavigationListItem>
+                    <NavigationListItem href="sensors" icon={<SensorsIcon />}>
+                        Sensory
+                    </NavigationListItem>
                     <Divider variant="middle" />
-                    <NavigationListItem href="predictions" icon={<AutoAwesomeIcon/>}>Prognozy</NavigationListItem>
+                    <NavigationListItem href="predictions" icon={<AutoAwesomeIcon />}>
+                        Prognozy
+                    </NavigationListItem>
                     <Divider variant="middle" />
-                    <NavigationListItem href="statistics" icon={<AutoGraphIcon/>}>Statystyki</NavigationListItem>
+                    <NavigationListItem href="statistics" icon={<AutoGraphIcon />}>
+                        Statystyki
+                    </NavigationListItem>
                 </List>
             </Drawer>
             <Box component="main" sx={[{ p: 2 }, contentMovedByDrawer(isDrawerOpen && isDesktop)]}>
