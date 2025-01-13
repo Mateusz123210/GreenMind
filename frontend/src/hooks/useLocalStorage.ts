@@ -9,10 +9,11 @@ export const useLocalStorage = (key: string) => {
     }, [key])
 
     useEffect(() => {
+        console.log("setting up the storage listener")
         const listener = (ev: StorageEvent) => {
             console.log(ev);
             if (ev.key === key) {
-                setValue(ev.newValue);
+                setValue(window.localStorage.getItem(key));
             }
         };
         window.addEventListener("storage", listener);

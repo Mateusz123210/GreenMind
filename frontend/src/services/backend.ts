@@ -1,7 +1,7 @@
 import { guardResOk, logout, refreshTokens } from "./auth";
 
 export const fetchBackend = async (input: string | URL, init?: RequestInit): Promise<Response> => {
-    const url = new URL(input);
+    const url = new URL(window.location.origin + input);
     const at = localStorage.getItem("access_token");
     const email = localStorage.getItem("email");
     url.searchParams.append("access_token", at!);
@@ -31,4 +31,4 @@ export const postBackend = (input: string, body: object): Promise<Response> => {
     })
 }
 
-export const jsonFetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then(res => res.json())
+export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) => fetchBackend(...args).then(res => res.json())

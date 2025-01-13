@@ -59,9 +59,9 @@ export const login = (email: string, password: string) => {
         .then(guardResOk)
         .then((res) => res.json())
         .then((data) => {
-            localStorage.setItem("email", email);
-            localStorage.setItem("access_token", data.access_token);
-            localStorage.setItem("refresh_token", data.refresh_token);
+            updateStorage("email", email);
+            updateStorage("access_token", data.access_token);
+            updateStorage("refresh_token", data.refresh_token);
         });
 };
 
@@ -80,4 +80,10 @@ export const refreshTokens = () => {
 export const logout = () => {
     fetchBackend("/api/logout", { method: "POST" });
     localStorage.clear();
+    window.dispatchEvent(new Event("storage"));
+};
+
+export const updateStorage = (key: string, value: string) => {
+    window.localStorage.setItem(key, value);
+    window.dispatchEvent(new Event("storage"));
 };
