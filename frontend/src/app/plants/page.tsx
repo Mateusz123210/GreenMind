@@ -1,13 +1,15 @@
 "use client";
 import { AddButton } from "@/components/AddButton";
 import { PlantCard } from "@/components/PlantCard";
-import { postBackend } from "@/services/backend";
+import { jsonFetcher, postBackend } from "@/services/backend";
 import { Plant } from "@/types/rest";
 import { Box, Button, LinearProgress, Stack, TextField, Typography } from "@mui/material";
 import useSWR from "swr";
 
 export default function Page() {
-    const { data: plants, isLoading, mutate } = useSWR<Plant[]>("/api/plants");
+    const { data: plants, isLoading, mutate } = useSWR<Plant[]>("/api/plants", jsonFetcher);
+    console.log("plant:")
+    console.log(plants)
     return (
         <Stack gap={3}>
             <Typography variant="h5">Rośliny</Typography>
@@ -51,7 +53,7 @@ export default function Page() {
                         title={"dupa"}
                         description={"dupskodupsko"}
                     />
-                {!!plants && plants?.map((plant) => (
+                {plants instanceof Array && plants?.map((plant) => (
                     <PlantCard
                         id={plant.id}
                         key={plant.id}

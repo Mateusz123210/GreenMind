@@ -57,6 +57,19 @@ interface Props {
     description: string;
     id: string;
 }
+const dupaFetcher = (...args: any) => Promise.resolve({
+    max_illuminance: 20,
+    comments: "sdfzsdf",
+    max_moisture: 10,
+    max_temperature: 10,
+    min_illuminance: 0,
+    min_moisture: 0,
+    min_temperature: 0,
+    name: "dupa",
+    opt_illuminance: 4,
+    opt_moisture: 4,
+    opt_temperature: 4
+} satisfies PlantConfig)
 export const PlantCard: React.FC<Props> = ({ title, description, id }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {

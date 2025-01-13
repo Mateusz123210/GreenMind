@@ -47,4 +47,7 @@ export const deleteBackend = (input: string | URL): Promise<Response> => {
 };
 
 export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
-    fetchBackend(...args).then((res) => res.json());
+    fetchBackend(...args).then((res) => res.json()).then(data => {
+        console.log(data)
+        return data
+    });

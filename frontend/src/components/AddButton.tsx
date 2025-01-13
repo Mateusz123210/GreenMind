@@ -1,5 +1,5 @@
 'use client'
-import { Button, Dialog, DialogContent } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FormEvent, PropsWithChildren, useState } from "react";
 
@@ -19,7 +19,10 @@ export const AddButton = <T,>({ onSubmit, children }: Props<T>) => {
             <Button sx={{ ml: "auto" }} startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="contained">
                 Dodaj
             </Button>
-            <Dialog open={isOpen}>
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+                <DialogTitle>
+                    Dodaj
+                </DialogTitle>
                 <DialogContent>
                     <form onSubmit={onSubmitForm}>
                         {children}

@@ -5,7 +5,7 @@ export const UserInfo: React.FC<{ email: string }> = ({ email }) => {
     return (
         <div>
             {email}
-            <Button onClick={logout} variant="outlined">Wyloguj</Button>
+            <Button onClick={logout} color="secondary" variant="outlined">Wyloguj</Button>
         </div>
     );
 };
