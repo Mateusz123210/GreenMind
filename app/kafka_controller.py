@@ -10,7 +10,7 @@ import pytz
 class KafkaController:
 
     def __init__(self):
-        self.moisture_range = (0, 100)
+        self.moisture_range = (0, 10000)
         self.temperature_range = (-100, 70)
         self.illuminance_range = (0, 100000)
         self.max_measurements_number = 527040 #60 x 24 x 366
@@ -43,7 +43,6 @@ class KafkaController:
         loaded = None
 
         try:
-
             loaded = json.loads(message.replace("'", '"'))
 
         except json.JSONDecodeError:
@@ -61,15 +60,16 @@ class KafkaController:
         token = loaded["token"]
 
         fetched_plant = crud.get_plant(token)
+
         if fetched_plant is None:
             return
-        
+
         try:
-            moisture = int(loaded["moisture"])
-            temperature = int(loaded["temperature"])
-            illuminance = int(loaded["illuminance"])
+            moisture = float(loaded["moisture"])
+            temperature = float(loaded["temperature"])
+            illuminance = float(loaded["illuminance"])
             timestamp = float(loaded["timestamp"])
-        
+
         except ValueError:
             return
 
