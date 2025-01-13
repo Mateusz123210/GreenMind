@@ -1,4 +1,4 @@
-import { fetchBackend } from "./backend";
+import { fetchBackend, headersJsonContentType } from "./backend";
 
 export interface User {
     email: string;
@@ -37,8 +37,9 @@ export const isPasswordCorrect = (password: string) => {
 };
 
 export const register = (email: string, password: string) => {
-    return fetch("api/login", {
+    return fetch("api/register", {
         method: "POST",
+        headers: headersJsonContentType,
         body: JSON.stringify({
             email,
             password,
@@ -49,6 +50,7 @@ export const register = (email: string, password: string) => {
 export const login = (email: string, password: string) => {
     return fetch("/api/login", {
         method: "POST",
+        headers: headersJsonContentType,
         body: JSON.stringify({
             email,
             password,

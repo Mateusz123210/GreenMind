@@ -18,3 +18,15 @@ export const fetchBackend = async (input: string | URL, init?: RequestInit): Pro
 
     return guardResOk(response);
 };
+
+export const headersJsonContentType = {
+    "Content-Type": "application/json"
+}
+
+export const postBackend = (input: string, body: object): Promise<Response> => {
+    return fetchBackend(input, {
+        method: "POST",
+        headers: headersJsonContentType,
+        body: JSON.stringify(body)
+    })
+}
