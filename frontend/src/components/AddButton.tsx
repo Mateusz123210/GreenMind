@@ -26,6 +26,7 @@ export const AddButton = <T,>({ onSubmit, children }: Props<T>) => {
                 <DialogContent>
                     <form onSubmit={onSubmitForm}>
                         {children}
+                        <Button type="submit" variant="contained" fullWidth>Zatwierdź</Button>
                     </form>
                 </DialogContent>
             </Dialog>

@@ -75,7 +75,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
         data: plantConfig,
         isLoading,
         mutate,
-    } = useSWR<PlantConfig>("/api/plants", jsonFetcher);
+    } = useSWR<PlantConfig>("/api/plants", dupaFetcher);
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {

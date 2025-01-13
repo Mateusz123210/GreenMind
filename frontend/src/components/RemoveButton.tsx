@@ -1,5 +1,5 @@
 'use client'
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FormEvent, PropsWithChildren, useState } from "react";
 
@@ -8,18 +8,24 @@ interface Props extends PropsWithChildren {
 }
 export const RemoveButton: React.FC<Props> = ({onSubmit}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const onYes = () => {
+        onSubmit();
+        setIsOpen(false)
+    }
     return (
         <>
-            <Button sx={{ ml: "auto" }} startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="contained">
+            <Stack direction="row" alignItems="end" px={2} py={0}>
+            <Button sx={{ ml: "auto" }} color="error" startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="contained">
                 Usuń
             </Button>
+            </Stack>
             <Dialog open={isOpen}>
                 <DialogContent>
                     Czy na pewno chcesz usunąć
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setIsOpen(false)}>Nie</Button>
-                    <Button onClick={onSubmit}>Tak</Button>
+                    <Button onClick={() => setIsOpen(false)} variant="contained">Nie</Button>
+                    <Button onClick={onYes} color="error" variant="contained">Tak</Button>
                 </DialogActions>
             </Dialog>
         </>
