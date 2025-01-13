@@ -129,3 +129,24 @@ spec:
             name: backend4-service
             port:
               number: 80
+      - path: /api/sensors
+        pathType: Exact
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
+      - path: /api/weather
+        pathType: Exact
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
+      - path: /api/predictions
+        pathType: Exact
+        backend:
+          service:
+            name: backend4-service
+            port:
+              number: 80
