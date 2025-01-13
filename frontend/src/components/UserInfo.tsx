@@ -1,6 +1,11 @@
-import { logout } from "@/services/auth"
-import { Button } from "@mui/material"
+import { logout } from "@/services/auth";
+import { Button } from "@mui/material";
 
-export const UserInfo = (email: string) => {
-    return <>{email}<Button onClick={logout}/></>
-}
+export const UserInfo: React.FC<{ email: string }> = ({ email }) => {
+    return (
+        <>
+            {email}
+            <Button onClick={logout} />
+        </>
+    );
+};

@@ -30,3 +30,5 @@ export const postBackend = (input: string, body: object): Promise<Response> => {
         body: JSON.stringify(body)
     })
 }
+
+export const jsonFetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then(res => res.json())

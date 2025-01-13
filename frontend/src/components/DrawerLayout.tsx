@@ -26,6 +26,7 @@ import GrassIcon from "@mui/icons-material/Grass";
 import FenceIcon from "@mui/icons-material/Fence";
 import { LoginButton } from "./LoginButton";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { UserInfo } from "./UserInfo";
 
 interface Props extends PropsWithChildren {
     pageTitle?: string;
@@ -60,7 +61,7 @@ export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind
                     <Typography variant="h4" component="h1">
                         {pageTitle}
                     </Typography>
-                    {loggedIn ? email : <LoginButton />}
+                    {loggedIn ? <UserInfo email={email!}/> : <LoginButton />}
                 </Toolbar>
             </AppBar>
             <Drawer
