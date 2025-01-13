@@ -24,6 +24,13 @@ spec:
             name: frontend1-service
             port:
               number: 80
+      - path: /_next
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend1-service
+            port:
+              number: 80
       - path: /api/register
         pathType: Exact
         backend:
