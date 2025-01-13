@@ -12,9 +12,8 @@ export const useLocalStorage = (key: string) => {
         console.log("setting up the storage listener")
         const listener = (ev: StorageEvent) => {
             console.log(ev);
-            if (ev.key === key) {
-                setValue(window.localStorage.getItem(key));
-            }
+            console.log(key);
+            setValue(window.localStorage.getItem(key));
         };
         window.addEventListener("storage", listener);
         return () => {

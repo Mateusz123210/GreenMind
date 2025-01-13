@@ -4,6 +4,7 @@ export const fetchBackend = async (input: string | URL, init?: RequestInit): Pro
     const url = new URL(window.location.origin + input);
     const at = localStorage.getItem("access_token");
     const email = localStorage.getItem("email");
+    url.searchParams.append("accessToken", at!);
     url.searchParams.append("access_token", at!);
     url.searchParams.append("email", email!);
     const response = await fetch(url, init);
@@ -20,15 +21,30 @@ export const fetchBackend = async (input: string | URL, init?: RequestInit): Pro
 };
 
 export const headersJsonContentType = {
-    "Content-Type": "application/json"
-}
+    "Content-Type": "application/json",
+};
 
 export const postBackend = (input: string, body: object): Promise<Response> => {
     return fetchBackend(input, {
         method: "POST",
         headers: headersJsonContentType,
-        body: JSON.stringify(body)
-    })
-}
+        body: JSON.stringify(body),
+    });
+};
 
-export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) => fetchBackend(...args).then(res => res.json())
+export const putBackend = (input: string, body: object): Promise<Response> => {
+    return fetchBackend(input, {
+        method: "PUT",
+        headers: headersJsonContentType,
+        body: JSON.stringify(body),
+    });
+};
+
+export const deleteBackend = (input: string | URL): Promise<Response> => {
+    return fetchBackend(input, {
+        method: "DELETE",
+    });
+};
+
+export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
+    fetchBackend(...args).then((res) => res.json());

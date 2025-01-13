@@ -1,13 +1,12 @@
 import { Slider, Stack, Typography } from "@mui/material";
-import { useState } from "react";
-
 
 interface Props {
     label: string;
     unit: string;
+    value: [number, number, number];
+    onValueChange: (newVal: [number, number, number]) => void
 }
-export const PlantSlider: React.FC<Props> = ({ label, unit }) => {
-    const [value, setValue] = useState<[number, number, number]>([15, 21, 30]);
+export const PlantSlider: React.FC<Props> = ({ label, unit, value, onValueChange }) => {
     const indexToLabel = ["min", "opt", "max"];
     const marks = Array.from({ length: 13 }, (_, i) => ({
         label: `${i * 5}${unit}`,
@@ -22,7 +21,7 @@ export const PlantSlider: React.FC<Props> = ({ label, unit }) => {
                     max={60}
                     marks={marks}
                     value={value}
-                    onChange={(_, newValue) => setValue(newValue as [number, number, number])}
+                    onChange={(_, newValue) => onValueChange(newValue as [number, number, number])}
                     disableSwap
                     valueLabelDisplay="on"
                     valueLabelFormat={(val, i) => `${indexToLabel[i]}: ${val}${unit}`}
