@@ -3,6 +3,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 import pandas as pd
+from app.feature_predictor import FeaturePredictor
 
 
 

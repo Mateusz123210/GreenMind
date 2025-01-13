@@ -12,6 +12,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import sklearn
 import os
 from app.prediction_service import average_moisture, predict_moisture_drop
+from app.feature_predictor import FeaturePredictor
 
 
 
@@ -37,7 +38,6 @@ class KafkaController:
 
 
     def handle_task(self, message: str):
-        print('aaa')
         loaded = None
 
         try:
@@ -46,10 +46,6 @@ class KafkaController:
                 
         except json.JSONDecodeError:
             return
-        
-        #print(loaded)
-        #print(loaded["uuid"])
-        
         weather_data=loaded['weather_data']
         # Convert weather data to a DataFrame
         weather_df = pd.DataFrame(weather_data)
@@ -58,7 +54,6 @@ class KafkaController:
         # Example usage:
         sensors_data= loaded['sensors_data']
         start_moisture_level = average_moisture(sensors_data)
-        print(f"Average of first positions: {start_moisture_level}")
         try:
             __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -67,13 +62,10 @@ class KafkaController:
 
             
             result = predict_moisture_drop(model_pipeline, weather_df, start_moisture_level, opt_moisture_level)
-            print(result)
             new_prediction_data={}
             new_prediction_data["predicted_watering_time"] = result
         except Exception as e:
-            print(e)
             return 
-
         self.save_to_database(id = loaded["uuid"], new_prediction_data = new_prediction_data)
 
     @mongo_predictions_transactional
