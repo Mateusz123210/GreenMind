@@ -51,7 +51,7 @@ export default function Page() {
                         title={"dupa"}
                         description={"dupskodupsko"}
                     />
-                {plants?.map((plant) => (
+                {!!plants && plants?.map((plant) => (
                     <PlantCard
                         id={plant.id}
                         key={plant.id}

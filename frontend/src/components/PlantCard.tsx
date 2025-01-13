@@ -111,7 +111,7 @@ export const PlantCard: React.FC<Props> = ({ title, description, id }) => {
                 </CardContent>
             </CardActionArea>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                {isLoading ? (
+                {isLoading || !plantConfig ? (
                     <LinearProgress />
                 ) : (
                     <>
