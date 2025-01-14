@@ -48,11 +48,6 @@ export default function Page() {
             </AddButton>
             <Stack gap={2}>
                 {isLoading && <LinearProgress />}
-                <PlantCard
-                        id={""}
-                        key={""}
-                        title={"dupa"}
-                    />
                 {plants instanceof Array && plants?.map((plant) => (
                     <PlantCard
                         id={plant.uuid}

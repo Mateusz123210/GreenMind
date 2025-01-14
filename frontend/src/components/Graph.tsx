@@ -1,9 +1,9 @@
-import { X } from "@mui/icons-material";
+'use client'
 import { Paper, Typography } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
 
 interface Props {
-    color?: string;
+    color: string;
     data: number[];
     xAxis: string[];
     label: string;

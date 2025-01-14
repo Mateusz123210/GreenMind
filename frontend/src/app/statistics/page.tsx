@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Graph } from "@/components/Graph";
 import { jsonFetcher } from "@/services/backend";
 import { DerangedStatistic } from "@/types/rest";
@@ -6,42 +6,37 @@ import { CircularProgress, Paper, Stack, Typography } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
 import useSWR from "swr";
 
+const testFetcher = () =>
+    Promise.resolve({
+        "Average plant conditions by days": [
+            ["2025-01-13", 1001.4, 22.62, 22.1],
+            ["2025-01-14", 1000.61, 22.62, 22.24],
+        ],
+    }); 
 export default function Page() {
     const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528"
     const {data: dataPayload, isLoading} = useSWR<DerangedStatistic>(['/api/statistics', plantation], ([url, plan]) => jsonFetcher(url, undefined, {plantationUUID: plan as string}))
     const data = dataPayload?.["Average plant conditions by days"]
     if (!data && !isLoading) {
-        return "error"
+        return "error";
     }
     if (isLoading) {
-        return <CircularProgress/>
+        return <CircularProgress />;
     }
 
-    const xAxis = data!.map(entry => entry[0])
-    const temperature = data!.map(entry => entry[1])
-    const moisture = data!.map(entry => entry[2])
-    const illuminance = data!.map(entry => entry[3])
-    
+    const xAxis = data!.map((entry) => entry[0]);
+    const temperature = data!.map((entry) => entry[1]);
+    const moisture = data!.map((entry) => entry[2]);
+    const illuminance = data!.map((entry) => entry[3]);
+
     return (
         <Stack gap={3}>
             <Typography variant="h5" component="h2">
                 Statystyki
             </Typography>
-            <Graph
-                data={temperature}
-                label="Temperatura"
-                xAxis={xAxis}
-            />
-            <Graph
-                data={moisture}
-                label="Wilgotność gleby"
-                xAxis={xAxis}
-            />
-            <Graph
-                data={illuminance}
-                label="Nasłonecznienie"
-                xAxis={xAxis}
-            />
+            <Graph color="#ce0606" data={temperature} label="Temperatura" xAxis={xAxis} />
+            <Graph color="#02d5d1" data={moisture} label="Wilgotność gleby" xAxis={xAxis} />
+            <Graph color="#f28e2c" data={illuminance} label="Nasłonecznienie" xAxis={xAxis} />
             {/* <Paper sx={{ p: 2 }}>
                 <Typography variant="h6">Zużycie wody</Typography>
                 <LineChart
