@@ -197,15 +197,16 @@ def get_sensors_data_from_db(plantationUUID: str, sensors_session):
 def sensors_stream(plantationUUID) -> Generator[str, None, None]:
     try:
         while True:
-            time.sleep(10)
               
             data = get_sensors_data_from_db(plantationUUID)
             if data is None: 
                 response = {"message": "No sensors data available!"}
                 yield f"data: {json.dumps(response)}\n\n"
+                time.sleep(10)
                 continue
                 
             yield f"data: {json.dumps(data)}\n\n"
+            time.sleep(10)
 
     except GeneratorExit:
         return
@@ -242,15 +243,16 @@ def get_weather_data_from_db(plantation_location: str, weather_session):
 def weather_stream(plantation_location) -> Generator[str, None, None]:
     try:
         while True:
-            time.sleep(10)
                       
             data = get_weather_data_from_db(plantation_location)
             if data is None: 
                 response = {"message": "No weather data available!"}
                 yield f"data: {json.dumps(response)}\n\n"
+                time.sleep(10)
                 continue
             
             yield f"data: {json.dumps(data)}\n\n"
+            time.sleep(10)
     
     except GeneratorExit:
         return
@@ -282,15 +284,17 @@ def get_predictions_data_from_db(plantationUUID: str, predictions_session):
 def predictions_stream(plantationUUID: str) -> Generator[str, None, None]:
     try:
         while True:
-            time.sleep(10)
             
             data = get_predictions_data_from_db(plantationUUID)
             if data is None: 
                 response = {"message": "No predictions available!"}
                 yield f"data: {json.dumps(response)}\n\n"
+                time.sleep(10)
                 continue
     
             yield f"data: {json.dumps(data)}\n\n"
+            time.sleep(10)
+
     except GeneratorExit:
         return
 
