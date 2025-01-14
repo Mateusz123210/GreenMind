@@ -17,3 +17,5 @@ export interface PlantConfig {
     opt_illuminance: number,
     max_illuminance: number
 }
+
+export type DerangedStatistic = {"Average plant conditions by days": Array<[string, number, number, number]>}

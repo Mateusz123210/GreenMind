@@ -1,12 +1,17 @@
 import { guardResOk, logout, refreshTokens } from "./auth";
 
-export const fetchBackend = async (input: string | URL, init?: RequestInit): Promise<Response> => {
+export const fetchBackend = async (input: string | URL, init?: RequestInit, additionalQuery?: Record<string, string>): Promise<Response> => {
     const url = (input instanceof URL) ? input : new URL(window.location.origin + input);
     const at = localStorage.getItem("access_token");
     const email = localStorage.getItem("email");
     url.searchParams.append("accessToken", at!);
     url.searchParams.append("access_token", at!);
     url.searchParams.append("email", email!);
+    if (additionalQuery) { 
+        Object.entries(additionalQuery).forEach(([key, val]) => {
+            url.searchParams.append(key, val)
+        })
+    }
     const response = await fetch(url, init);
     if (response.status == 401) {
         await refreshTokens();
