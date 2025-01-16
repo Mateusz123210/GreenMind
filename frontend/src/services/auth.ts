@@ -82,7 +82,7 @@ export const refreshTokens = () => {
 };
 
 export const logout = () => {
-    const url = new URL(window.location.origin + "/api/logout");
+    const url = new URL("greenmind.com" + "/api/logout");
     url.searchParams.append("refresh_token", localStorage.getItem("refresh_token")!);
     url.searchParams.append("email", localStorage.getItem("email")!);
     fetch("/api/logout", { method: "POST" });

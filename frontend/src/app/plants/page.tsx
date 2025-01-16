@@ -7,8 +7,8 @@ import { Box, Button, LinearProgress, Stack, TextField, Typography } from "@mui/
 import useSWR from "swr";
 
 export default function Page() {
-    const { data: plantsRes, isLoading, mutate } = useSWR<{plants: Plant[]}>("/api/plants", jsonFetcher);
-    const plants = plantsRes?.plants
+    //const { data: plantsRes, isLoading, mutate } = useSWR<{plants: Plant[]}>("/api/plants", jsonFetcher);
+    const plants = [{uuid: "1677", name: "Borówka amerykańska"}, {uuid: "1678", name: "Truskawka"}]
     console.log("plant:")
     console.log(plants)
     return (
@@ -28,15 +28,15 @@ export default function Page() {
                         max_illuminance: 20,
                     });
 
-                    mutate(postBackend("/api/plant", newObject) as any, {
-                        optimisticData: { plants: [
-                            ...plants!,
-                            Object.assign(data, {
-                                uuid: Math.random() + "",
-                                description: data.comments,
-                            }),
-                        ]},
-                    });
+                    // mutate(postBackend("/api/plant", newObject) as any, {
+                    //     optimisticData: { plants: [
+                    //         ...plants!,
+                    //         Object.assign(data, {
+                    //             uuid: Math.random() + "",
+                    //             description: data.comments,
+                    //         }),
+                    //     ]},
+                    // });
                 }}
             >
                 <Box>
@@ -47,12 +47,6 @@ export default function Page() {
                 </Box>
             </AddButton>
             <Stack gap={2}>
-                {isLoading && <LinearProgress />}
-                <PlantCard
-                        id={""}
-                        key={""}
-                        title={"dupa"}
-                    />
                 {plants instanceof Array && plants?.map((plant) => (
                     <PlantCard
                         id={plant.uuid}

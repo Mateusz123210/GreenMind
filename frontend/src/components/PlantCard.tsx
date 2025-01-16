@@ -56,15 +56,15 @@ interface Props {
     title: string;
     id: string;
 }
-const dupaFetcher = (...args: any) => Promise.resolve({
+const exampleFetcher = (...args: any) => Promise.resolve({
     max_illuminance: 20,
-    comments: "sdfzsdf",
+    comments: "jagoda jadalna",
     max_moisture: 10,
     max_temperature: 10,
     min_illuminance: 0,
     min_moisture: 0,
     min_temperature: 0,
-    name: "dupa",
+    name: "Borówka",
     opt_illuminance: 4,
     opt_moisture: 4,
     opt_temperature: 4
@@ -75,7 +75,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
         data: plantConfig,
         isLoading,
         mutate,
-    } = useSWR<PlantConfig>("/api/plants", dupaFetcher);
+    } = useSWR<PlantConfig>("/api/plants", exampleFetcher);
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {
@@ -128,7 +128,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                 ) : (
                     <>
                         <RemoveButton onSubmit={() => {
-                            const url = new URL(window.location.origin + '/api/plant')
+                            const url = new URL("greenmind.com" + '/api/plant')
                             url.searchParams.append("plantUUID", id)
                             globalMutate('/api/plants', deleteBackend(url))
                         }} />
