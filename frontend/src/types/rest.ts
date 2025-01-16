@@ -9,6 +9,13 @@ export interface Plantation {
     name: string; 
 }
 
+export interface PlantationDetails {
+    name: string;
+    token: string;
+    latitude: string;
+    longitude: string;
+}
+
 export interface PlantConfig {
     comments: string;
     name: string;
@@ -22,5 +29,7 @@ export interface PlantConfig {
     opt_illuminance: number,
     max_illuminance: number
 }
+
+
 
 export type DerangedStatistic = {"Average plant conditions by days": Array<[string, number, number, number]>}

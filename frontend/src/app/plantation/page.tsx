@@ -1,13 +1,24 @@
+'use client'
+import { AddButton } from "@/components/AddButton";
 import { PlantationCard } from "@/components/PlantationCard";
-import { useBackend } from "@/services/backend";
-import { Plantation } from "@/types/rest";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { postBackend, useBackend } from "@/services/backend";
+import { Plantation, PlantationDetails } from "@/types/rest";
+import { CircularProgress, Stack, TextField, Typography } from "@mui/material";
 
 export default function Page() {
-    const { data: plantations, isLoading, error } = useBackend<Plantation[]>("/api/plantations");
+    const { data: plantationsData, isLoading, error, mutate } = useBackend<{plantations: Plantation[]}>("/api/plantations");
+    const plantations = plantationsData?.plantations;
     return (
         <Stack gap={3}>
             <Typography variant="h5">Hodowle</Typography>
+            <AddButton<PlantationDetails> onSubmit={(data) => {
+                mutate(postBackend('/api/plantation', data).then(() => plantationsData))
+            }}>
+                <TextField name="name" label="nazwa"/>
+                <TextField name="latitude" label="latitude"/>
+                <TextField name="longitude" label="longitude"/>
+                <TextField name="token" label="token"/>
+            </AddButton>
             <Stack gap={2}>
                 {isLoading && <CircularProgress />}
                 {error && "error"}

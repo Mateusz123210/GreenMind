@@ -1,3 +1,4 @@
+import { enqueueSnackbar } from "notistack";
 import { fetchBackend, headersJsonContentType } from "./backend";
 
 export interface User {
@@ -10,7 +11,7 @@ export const guardResOk = (res: Response) => {
     if (res.ok) {
         return Promise.resolve(res);
     } else {
-        // TODO notify
+        enqueueSnackbar(String(res.body), { variant: "error" });
         console.log(res.status);
         console.log(res.statusText);
         return Promise.reject(res.status);

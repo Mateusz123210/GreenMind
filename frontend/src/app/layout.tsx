@@ -6,6 +6,7 @@ import "./globals.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "@/styles/theme";
 import { DrawerLayout } from "@/components/DrawerLayout";
+import { SnackbarProvider } from "notistack";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -33,6 +34,7 @@ export default function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
+                    <SnackbarProvider/>
                     <DrawerLayout subpageTitle="Dashboard">{children}</DrawerLayout>
                 </ThemeProvider>
             </body>
