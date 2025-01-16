@@ -1,4 +1,6 @@
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { guardResOk, logout, refreshTokens } from "./auth";
+import useSWR from "swr";
 
 export const fetchBackend = async (input: string | URL, init?: RequestInit, additionalQuery?: Record<string, string>): Promise<Response> => {
     const url = (input instanceof URL) ? input : new URL(window.location.origin + input);
@@ -56,3 +58,10 @@ export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
         console.log(data)
         return data
     });
+
+export const useLoginInfo = () => useLocalStorage("email");
+
+export const useBackend = <T>(url: string, additionalQuery?: Record<string, string>) => {
+    const isLoggedIn = Boolean(useLoginInfo());
+    return useSWR<T>(isLoggedIn && [url, ...(!additionalQuery ? [] : Object.keys(additionalQuery))], ([url]) => jsonFetcher(url, undefined, additionalQuery))
+}

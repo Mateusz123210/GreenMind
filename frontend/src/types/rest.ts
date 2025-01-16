@@ -4,6 +4,11 @@ export interface Plant {
     // description: string;
 }
 
+export interface Plantation {
+    uuid: string;
+    name: string; 
+}
+
 export interface PlantConfig {
     comments: string;
     name: string;
