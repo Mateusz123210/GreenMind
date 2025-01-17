@@ -1,10 +1,8 @@
 "use client";
 import { Graph } from "@/components/Graph";
-import { jsonFetcher } from "@/services/backend";
+import { useBackend } from "@/services/backend";
 import { DerangedStatistic } from "@/types/rest";
-import { CircularProgress, Paper, Stack, Typography } from "@mui/material";
-import { LineChart } from "@mui/x-charts";
-import useSWR from "swr";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 
 const testFetcher = () =>
     Promise.resolve({
@@ -15,7 +13,7 @@ const testFetcher = () =>
     }); 
 export default function Page() {
     const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528"
-    const {data: dataPayload, isLoading} = useSWR<DerangedStatistic>(['/api/statistics', plantation], ([url, plan]) => jsonFetcher(url, undefined, {plantationUUID: plan as string}))
+    const {data: dataPayload, isLoading} = useBackend<DerangedStatistic>('/api/statistics', {plantationUUID: plantation as string})
     const data = dataPayload?.["Average plant conditions by days"]
     if (!data && !isLoading) {
         return "error";

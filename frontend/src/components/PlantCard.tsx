@@ -14,9 +14,8 @@ import {
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { PlantSlider } from "./PlantSlider";
-import useSWR from "swr";
 import { PlantConfig } from "@/types/rest";
-import { deleteBackend, jsonFetcher, putBackend } from "@/services/backend";
+import { deleteBackend, putBackend, useBackend } from "@/services/backend";
 import { RemoveButton } from "./RemoveButton";
 import { mutate as globalMutate } from "swr";
 
@@ -75,7 +74,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
         data: plantConfig,
         isLoading,
         mutate,
-    } = useSWR<PlantConfig>(["/api/plant", id], ([url, plantId]) => jsonFetcher(url, undefined, {plantUUID: plantId as string}));
+    } = useBackend<PlantConfig>("/api/plant", {plantUUID: id as string});
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {

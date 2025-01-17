@@ -1,13 +1,12 @@
 "use client";
 import { AddButton } from "@/components/AddButton";
 import { PlantCard } from "@/components/PlantCard";
-import { jsonFetcher, postBackend } from "@/services/backend";
+import { jsonFetcher, postBackend, useBackend } from "@/services/backend";
 import { Plant } from "@/types/rest";
 import { Box, Button, LinearProgress, Stack, TextField, Typography } from "@mui/material";
-import useSWR from "swr";
 
 export default function Page() {
-    const { data: plantsRes, isLoading, mutate } = useSWR<{plants: Plant[]}>("/api/plants", jsonFetcher);
+    const { data: plantsRes, isLoading, mutate } = useBackend<{plants: Plant[]}>("/api/plants");
     const plants = plantsRes?.plants
     console.log("plant:")
     console.log(plants)
