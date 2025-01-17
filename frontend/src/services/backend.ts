@@ -9,7 +9,7 @@ export const fetchBackend = async (
     init?: RequestInit,
     additionalQuery?: Record<string, string>
 ): Promise<Response> => {
-    const url = input instanceof URL ? input : new URL(window.location.origin + input);
+    const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + input);
     const at = localStorage.getItem("access_token");
     const email = localStorage.getItem("email");
     url.searchParams.append("accessToken", at!);
@@ -80,7 +80,7 @@ export const useBackend = <T>(url: string, additionalQuery?: Record<string, stri
 export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>) => {
     const email = useLoginInfo();
     const eventSource = useMemo(() => {
-        const url = new URL(window.location.origin + path);
+        const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + path);
         const at = localStorage.getItem("access_token");
         url.searchParams.append("accessToken", at!);
         url.searchParams.append("access_token", at!);

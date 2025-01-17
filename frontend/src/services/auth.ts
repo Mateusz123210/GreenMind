@@ -38,7 +38,7 @@ export const isPasswordCorrect = (password: string) => {
 };
 
 export const register = (email: string, password: string) => {
-    return fetch("api/register", {
+    return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/register`, {
         method: "POST",
         headers: headersJsonContentType,
         body: JSON.stringify({
@@ -49,7 +49,7 @@ export const register = (email: string, password: string) => {
 };
 
 export const login = (email: string, password: string) => {
-    return fetch("/api/login", {
+    return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`, {
         method: "POST",
         headers: headersJsonContentType,
         body: JSON.stringify({
@@ -67,7 +67,7 @@ export const login = (email: string, password: string) => {
 };
 
 export const refreshTokens = () => {
-    const url = new URL("/api/refresh-token");
+    const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/refresh-token`);
     url.searchParams.append("refresh_token", localStorage.getItem("refresh_token")!);
     url.searchParams.append("email", localStorage.getItem("email")!);
     return fetch(url, {
@@ -83,10 +83,14 @@ export const refreshTokens = () => {
 };
 
 export const logout = () => {
-    const url = new URL(window.location.origin + "/api/logout");
-    url.searchParams.append("refresh_token", localStorage.getItem("refresh_token")!);
-    url.searchParams.append("email", localStorage.getItem("email")!);
-    fetch("/api/logout", { method: "POST" });
+    var url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/logout`);
+    const accessToken = localStorage.getItem("access_token")!
+    const email = localStorage.getItem("email")!
+    url.searchParams.append("accessToken", accessToken);
+    url.searchParams.append("email", email);
+
+    fetch(url , { method: "POST" })
+
     localStorage.clear();
     window.dispatchEvent(new Event("storage"));
 };
