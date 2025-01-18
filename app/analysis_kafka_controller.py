@@ -136,7 +136,7 @@ class AnalysisKafkaController:
     def send_message(self, data):
 
         self.producer.poll(0)
-
+        
         self.producer.produce(
             "analysis-start",
             data,
