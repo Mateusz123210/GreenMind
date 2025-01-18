@@ -9,6 +9,8 @@ SQLALCHEMY_DATABASE_URL = url
 
 plants_engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
+    pool_size=2,
+    max_overflow=0
 )
 SessionMaker = sessionmaker(autocommit=False, autoflush=False, bind=plants_engine)
 
