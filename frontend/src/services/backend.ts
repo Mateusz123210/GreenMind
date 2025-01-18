@@ -9,9 +9,9 @@ export const fetchBackend = async (
     init?: RequestInit,
     additionalQuery?: Record<string, string>
 ): Promise<Response> => {
-    const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + input);
-    const at = localStorage.getItem("access_token");
-    const email = localStorage.getItem("email");
+    var url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + input);
+    var at = localStorage.getItem("access_token");
+    var email = localStorage.getItem("email");
     url.searchParams.append("accessToken", at!);
     url.searchParams.append("access_token", at!);
     url.searchParams.append("email", email!);
@@ -20,14 +20,27 @@ export const fetchBackend = async (
             url.searchParams.append(key, val);
         });
     }
-    const response = await fetch(url, init);
+    var response = await fetch(url, init);
     if (response.status == 401) {
-        await refreshTokens();
-        return fetchBackend(input, init);
+
+        const refreshTokenResponse = await refreshTokens();
+        url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + input);
+        url.searchParams.append("accessToken", refreshTokenResponse!["access_token"]);
+        url.searchParams.append("access_token", refreshTokenResponse!["access_token"]);
+        url.searchParams.append("email", refreshTokenResponse!["email"]);
+        const fetchResponse = await fetch(url, init);
+        if (fetchResponse.status == 403) {
+            localStorage.clear();
+            window.dispatchEvent(new Event("storage"));
+            return guardResOk(response);
+        }
+        return guardResOk(response);
+
     }
     if (response.status == 403) {
-        logout();
-        return response;
+        localStorage.clear();
+        window.dispatchEvent(new Event("storage"));
+        return guardResOk(response);
     }
 
     return guardResOk(response);
