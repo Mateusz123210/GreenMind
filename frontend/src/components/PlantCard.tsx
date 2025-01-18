@@ -55,19 +55,19 @@ interface Props {
     title: string;
     id: string;
 }
-const dupaFetcher = (...args: any) => Promise.resolve({
-    max_illuminance: 20,
-    comments: "sdfzsdf",
-    max_moisture: 10,
-    max_temperature: 10,
-    min_illuminance: 0,
-    min_moisture: 0,
-    min_temperature: 0,
-    name: "dupa",
-    opt_illuminance: 4,
-    opt_moisture: 4,
-    opt_temperature: 4
-} satisfies PlantConfig)
+// const dupaFetcher = (...args: any) => Promise.resolve({
+//     max_illuminance: 20,
+//     comments: "sdfzsdf",
+//     max_moisture: 10,
+//     max_temperature: 10,
+//     min_illuminance: 0,
+//     min_moisture: 0,
+//     min_temperature: 0,
+//     name: "dupa",
+//     opt_illuminance: 4,
+//     opt_moisture: 4,
+//     opt_temperature: 4
+// } satisfies PlantConfig)
 export const PlantCard: React.FC<Props> = ({ title, id }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {
@@ -127,9 +127,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                 ) : (
                     <>
                         <RemoveButton onSubmit={() => {
-                            const url = new URL(window.location.origin + '/api/plant')
-                            url.searchParams.append("plantUUID", id)
-                            globalMutate('/api/plants', deleteBackend(url))
+                            globalMutate('/api/plants', deleteBackend('/api/plant', {plantUUID: id}))
                         }} />
                         <CardContent>
                             <Typography variant="h6">uwagi</Typography>

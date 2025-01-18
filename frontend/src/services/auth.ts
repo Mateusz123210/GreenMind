@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { fetchBackend, headersJsonContentType } from "./backend";
+import { headersJsonContentType } from "./backend";
 
 export interface User {
     email: string;
@@ -11,7 +11,7 @@ export const guardResOk = (res: Response) => {
     if (res.ok) {
         return Promise.resolve(res);
     } else {
-        enqueueSnackbar(String(res.body), { variant: "error" });
+        res.json().then(json => enqueueSnackbar(String(json?.detail), { variant: "error" }));
         console.log(res.status);
         console.log(res.statusText);
         return Promise.reject(res.status);

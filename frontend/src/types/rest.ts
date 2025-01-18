@@ -9,6 +9,9 @@ export interface Plantation {
     name: string; 
 }
 
+//wilg, temp, nasł, unixtimestamp
+export type SensorUpdate = [number, number, number, number];
+
 export interface PlantationDetails {
     name: string;
     token: string;

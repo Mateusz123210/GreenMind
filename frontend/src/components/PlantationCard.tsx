@@ -4,12 +4,14 @@ import OpacityIcon from "@mui/icons-material/Opacity";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { useBackend, useSSE } from "@/services/backend";
-import { PlantationDetails } from "@/types/rest";
+import { PlantationDetails, SensorUpdate } from "@/types/rest";
 
 interface Props {
     title: string;
     id: string;
 }
+
+//plantacja: pogodowe, token, sensory na bieżąco, podlewanie, historyczne dane z sensorów na wykresie z endpointu /api/sensorsdata
 export const PlantationCard: React.FC<Props> = ({ title, id }) => {
     const {
         data: plantation,
@@ -32,9 +34,8 @@ interface SensorProps {
     plantationid: string;
 }
 const PlantationSensors: React.FC<SensorProps> = ({plantationid}) => {
-    const sensorValues = useSSE('/api/sensors', {plantationUUID: plantationid});
+    const sensorValues = useSSE<SensorUpdate>('/api/sensors', {plantationUUID: plantationid}) ?? [];
     console.log(sensorValues);
-    console.log(sensorValues)
     return (
         <>
             <Typography variant="h5">
