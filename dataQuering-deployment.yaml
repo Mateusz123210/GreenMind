@@ -1,19 +1,19 @@
-#analysis service
+#data quering service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend3
+  name: backend4
   labels:
-    app: backend3
+    app: backend4
 spec:
-  replicas: 6
+  replicas: 1
   selector:
     matchLabels:
-      app: backend3
+      app: backend4
   template:
     metadata:
       labels:
-        app: backend3
+        app: backend4
     spec:
       dnsPolicy: ClusterFirst
       dnsConfig:
@@ -21,10 +21,10 @@ spec:
           - 8.8.8.8
           - 8.8.4.4
       containers:
-      - name: backend3
-        image: kubregistry2.azurecr.io/backend3:latest
+      - name: backend4
+        image: kubregistry2.azurecr.io/backend4:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8004
+        - containerPort: 8006
       imagePullSecrets: 
         - name: kubernetessecretname

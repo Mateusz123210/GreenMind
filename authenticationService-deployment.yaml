@@ -1,19 +1,19 @@
-#weather api service
+#authentication service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend6
+  name: backend
   labels:
-    app: backend6
+    app: backend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: backend6
+      app: backend
   template:
     metadata:
       labels:
-        app: backend6
+        app: backend
     spec:
       dnsPolicy: ClusterFirst
       dnsConfig:
@@ -21,10 +21,10 @@ spec:
           - 8.8.8.8
           - 8.8.4.4
       containers:
-      - name: backend6
-        image: kubregistry2.azurecr.io/backend6:latest
+      - name: backend
+        image: kubregistry2.azurecr.io/backend:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8002
+        - containerPort: 8005
       imagePullSecrets: 
         - name: kubernetessecretname
