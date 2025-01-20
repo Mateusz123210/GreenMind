@@ -1,9 +1,11 @@
 "use client";
 import { AddButton } from "@/components/AddButton";
 import { PlantationCard } from "@/components/PlantationCard";
+import { PlantChooser } from "@/components/PlantChooser";
 import { postBackend, useBackend } from "@/services/backend";
-import { Plantation, PlantationDetails } from "@/types/rest";
+import { Plant, Plantation, PlantationDetails } from "@/types/rest";
 import { CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
 export default function Page() {
     const {
@@ -13,12 +15,17 @@ export default function Page() {
         mutate,
     } = useBackend<{ plantations: Plantation[] }>("/api/plantations");
     const plantations = plantationsData?.plantations;
+    const [chosenPlant, setChosenPlant] = useState<Plant | null>(null);
+
     return (
         <Stack gap={3}>
             <Typography variant="h5">Hodowle</Typography>
             <AddButton<PlantationDetails>
                 onSubmit={(data) => {
-                    mutate(postBackend("/api/plantation", data).then(() => plantationsData));
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const modData = data as any
+                    modData.plant_id = chosenPlant?.name ?? ''
+                    mutate(postBackend("/api/plantation", modData).then(() => plantationsData));
                 }}
             >
                 <Stack direction="column" gap={3}>
@@ -26,7 +33,7 @@ export default function Page() {
                     <TextField name="latitude" label="latitude" />
                     <TextField name="longitude" label="longitude" />
                     <TextField name="token" label="token" />
-                    <TextField name="plant_id" label="roślina"/>
+                    <PlantChooser plant={chosenPlant} onPlantationChange={setChosenPlant} />
                 </Stack>
             </AddButton>
             <Stack gap={2}>

@@ -5,8 +5,9 @@ import { FormEvent, PropsWithChildren, useState } from "react";
 
 interface Props extends PropsWithChildren {
     onSubmit: () => void;
+    absolute?: boolean;
 }
-export const RemoveButton: React.FC<Props> = ({onSubmit}) => {
+export const RemoveButton: React.FC<Props> = ({onSubmit, absolute = false}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const onYes = () => {
         onSubmit();
@@ -14,11 +15,9 @@ export const RemoveButton: React.FC<Props> = ({onSubmit}) => {
     }
     return (
         <>
-            <Stack direction="row" alignItems="end" px={2} py={0}>
-            <Button sx={{ ml: "auto" }} color="error" startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="contained">
+            <Button sx={{ float: "right", m: 1 }} color="error" startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="outlined">
                 Usuń
             </Button>
-            </Stack>
             <Dialog open={isOpen}>
                 <DialogContent>
                     Czy na pewno chcesz usunąć

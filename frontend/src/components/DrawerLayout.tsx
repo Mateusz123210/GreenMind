@@ -36,8 +36,8 @@ interface Props extends PropsWithChildren {
 
 export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind" }) => {
     const isDesktop = useMediaQuery((t: Theme) => t.breakpoints.up("md"));
-    const [isDrawerOpen, setDrawerOpen] = useState<boolean>(isDesktop);
     const email = useLocalStorage("email");
+    const [isDrawerOpen, setDrawerOpen] = useState<boolean>(Boolean(email) && isDesktop);
     const loggedIn = Boolean(email);
 
     return (
@@ -54,7 +54,7 @@ export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind
                         color="inherit"
                         hidden={isDrawerOpen}
                         sx={{ visibility: isDrawerOpen ? "hidden" : "visible" }}
-                        onClick={() => setDrawerOpen(true)}
+                        onClick={() => email && setDrawerOpen(true)}
                     >
                         <MenuIcon />
                     </IconButton>

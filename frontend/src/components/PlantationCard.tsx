@@ -18,12 +18,14 @@ import {
 import OpacityIcon from "@mui/icons-material/Opacity";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
-import { postBackend, useBackend, useSensorUpdate } from "@/services/backend";
+import { deleteBackend, postBackend, useBackend, useSensorUpdate } from "@/services/backend";
 import { PlantationDetails } from "@/types/rest";
 import { FormEvent, useMemo, useState } from "react";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { RemoveButton } from "./RemoveButton";
+import { mutate as globalMutate } from "swr";
 
 interface Props {
     title: string;
@@ -32,15 +34,25 @@ interface Props {
 
 //plantacja: pogodowe, token, podlewanie, historyczne dane z sensorów na wykresie z endpointu /api/sensorsdata
 export const PlantationCard: React.FC<Props> = ({ title, id }) => {
-    const plantationQueryParams = useMemo(() => ({plantationUUID: id}), [id])
+    const plantationQueryParams = useMemo(() => ({ plantationUUID: id }), [id]);
     const {
         data: plantation,
         isLoading,
         error,
     } = useBackend<PlantationDetails>("/api/plantation", plantationQueryParams);
+
     return (
         <Card>
-            <CardHeader title={title} />
+                <RemoveButton absolute
+                    onSubmit={() => {
+                        globalMutate(
+                            "/api/plantation",
+                            deleteBackend("/api/plantation", { plantationUUID: id })
+                        );
+                    }}
+                />
+            <CardHeader title={title}>
+            </CardHeader>
             <CardContent>
                 {isLoading && <LinearProgress />}
                 {error && "error"}
@@ -71,7 +83,7 @@ const PlantationSensors: React.FC<SensorProps> = ({ plantationid }) => {
                     <OpacityIcon /> {wilg.toFixed(2)}%
                 </Typography>
                 <Typography variant="h5">
-                    <WbSunnyIcon /> {nasl.toFixed(2)}lx
+                    <WbSunnyIcon /> {nasl.toFixed(0)}lx
                 </Typography>
             </Stack>
             <Typography variant="caption">
