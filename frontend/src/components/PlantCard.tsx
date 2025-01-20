@@ -11,7 +11,7 @@ import {
     styled,
     Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { PlantSlider } from "./PlantSlider";
 import { PlantConfig } from "@/types/rest";
@@ -70,11 +70,12 @@ interface Props {
 // } satisfies PlantConfig)
 export const PlantCard: React.FC<Props> = ({ title, id }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
+    const plantQueryParams = useMemo(() => ({plantUUID: id}), [id])
     const {
         data: plantConfig,
         isLoading,
         mutate,
-    } = useBackend<PlantConfig>("/api/plant", { plantUUID: id as string });
+    } = useBackend<PlantConfig>("/api/plant", plantQueryParams);
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {

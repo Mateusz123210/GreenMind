@@ -3,6 +3,7 @@ import { Graph } from "@/components/Graph";
 import { useBackend } from "@/services/backend";
 import { DerangedStatistic } from "@/types/rest";
 import { CircularProgress, Stack, Typography } from "@mui/material";
+import { useMemo } from "react";
 
 // const testFetcher = () =>
 //     Promise.resolve({
@@ -13,9 +14,8 @@ import { CircularProgress, Stack, Typography } from "@mui/material";
 //     });
 export default function Page() {
     const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528";
-    const { data: dataPayload, isLoading } = useBackend<DerangedStatistic>("/api/statistics", {
-        plantationUUID: plantation as string,
-    });
+    const plantationQueryParams = useMemo(() => ({plantationUUID: plantation}), [plantation])
+    const { data: dataPayload, isLoading } = useBackend<DerangedStatistic>("/api/statistics", plantationQueryParams);
     const data = dataPayload?.["Average plant conditions by days"];
     if (!data && !isLoading) {
         return "error";

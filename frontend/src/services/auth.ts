@@ -1,7 +1,6 @@
 import { enqueueSnackbar } from "notistack";
 import { headersJsonContentType } from "./backend";
 import { Mutex } from "async-mutex";
-import { access } from "fs";
 
 export interface User {
     email: string;
@@ -69,7 +68,7 @@ export const login = (email: string, password: string) => {
 };
 
 
-let tokens = {"previous_access_token": "", "access_token": "", "refresh_token": ""}
+const tokens = {"previous_access_token": "", "access_token": "", "refresh_token": ""}
 const mutex = new Mutex()
 
 export const refreshTokens = async (prev_access_token: string) => {
@@ -105,7 +104,7 @@ export const refreshTokens = async (prev_access_token: string) => {
                     refresh_token: data.refresh_token,
                 };
             })
-            .catch((err) => {
+            .catch(() => {
                 tokens["previous_access_token"] = ""
                 return null
             })
@@ -115,7 +114,7 @@ export const refreshTokens = async (prev_access_token: string) => {
 export const logout = async () => {
     let url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/logout`);
     let accessToken = localStorage.getItem("access_token")!;
-    let email = localStorage.getItem("email")!;
+    const email = localStorage.getItem("email")!;
     url.searchParams.append("accessToken", accessToken);
     url.searchParams.append("email", email);
 
@@ -144,7 +143,7 @@ export const logout = async () => {
 export const deleteAccount = async () => {
     let url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account`);
     let accessToken = localStorage.getItem("access_token")!;
-    let email = localStorage.getItem("email")!;
+    const email = localStorage.getItem("email")!;
     url.searchParams.append("accessToken", accessToken);
     url.searchParams.append("email", email);
 

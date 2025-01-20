@@ -1,7 +1,7 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { guardResOk, refreshTokens, updateStorage } from "./auth";
 import useSWR from "swr";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { SensorUpdate } from "@/types/rest";
 
@@ -170,8 +170,9 @@ export function mapValue(
 }
 
 export const useSensorUpdate = (plantationid: string) => {
+    const plantationQueryParams = useMemo(() => ({plantationUUID: plantationid}), [plantationid])
     const [wilg, temp, nasl, timestamp] =
-        useSSE<SensorUpdate>("/api/sensors", { plantationUUID: plantationid }) ?? [];
+        useSSE<SensorUpdate>("/api/sensors", plantationQueryParams) ?? [];
     const date = timestamp && new Date(timestamp * 1000);
     const parsedWilg = wilg && mapValue(wilg, 300, 1000, 0, 100);
     return parsedWilg && temp && nasl && date ? ([parsedWilg, temp, nasl, date] as const) : null;

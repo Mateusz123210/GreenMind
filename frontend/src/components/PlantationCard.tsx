@@ -20,7 +20,7 @@ import ThermostatIcon from "@mui/icons-material/Thermostat";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { postBackend, useBackend, useSensorUpdate } from "@/services/backend";
 import { PlantationDetails } from "@/types/rest";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -32,11 +32,12 @@ interface Props {
 
 //plantacja: pogodowe, token, podlewanie, historyczne dane z sensorów na wykresie z endpointu /api/sensorsdata
 export const PlantationCard: React.FC<Props> = ({ title, id }) => {
+    const plantationQueryParams = useMemo(() => ({plantationUUID: id}), [id])
     const {
         data: plantation,
         isLoading,
         error,
-    } = useBackend<PlantationDetails>("/api/plantation", { plantationUUID: id });
+    } = useBackend<PlantationDetails>("/api/plantation", plantationQueryParams);
     return (
         <Card>
             <CardHeader title={title} />
