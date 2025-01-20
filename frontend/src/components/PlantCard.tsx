@@ -74,7 +74,7 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
         data: plantConfig,
         isLoading,
         mutate,
-    } = useBackend<PlantConfig>("/api/plant", {plantUUID: id as string});
+    } = useBackend<PlantConfig>("/api/plant", { plantUUID: id as string });
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {
@@ -126,9 +126,14 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                     <LinearProgress />
                 ) : (
                     <>
-                        <RemoveButton onSubmit={() => {
-                            globalMutate('/api/plants', deleteBackend('/api/plant', {plantUUID: id}))
-                        }} />
+                        <RemoveButton
+                            onSubmit={() => {
+                                globalMutate(
+                                    "/api/plants",
+                                    deleteBackend("/api/plant", { plantUUID: id })
+                                );
+                            }}
+                        />
                         <CardContent>
                             <Typography variant="h6">uwagi</Typography>
                             <Typography variant="body2" pb={4}>
@@ -143,6 +148,9 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                                     plantConfig!.max_temperature,
                                 ]}
                                 onValueChange={onValueChange("temperature")}
+                                length={13}
+                                mult={5}
+                                max={60}
                             />
                             <PlantSlider
                                 label="Wilgotność"
@@ -153,6 +161,9 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                                     plantConfig!.max_moisture,
                                 ]}
                                 onValueChange={onValueChange("moisture")}
+                                length={21}
+                                mult={5}
+                                max={100}
                             />
                             <PlantSlider
                                 label="Nasłonecznienie"
@@ -163,6 +174,9 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                                     plantConfig!.max_illuminance,
                                 ]}
                                 onValueChange={onValueChange("illuminance")}
+                                length={21}
+                                mult={250}
+                                max={5000}
                             />
                         </CardContent>
                     </>

@@ -3,6 +3,7 @@ import { guardResOk, refreshTokens } from "./auth";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { enqueueSnackbar } from "notistack";
+import { SensorUpdate } from "@/types/rest";
 
 export const fetchBackend = async (
     input: string | URL,
@@ -48,26 +49,49 @@ export const headersJsonContentType = {
     "Content-Type": "application/json",
 };
 
-export const postBackend = (input: string, body: object, additionalQuery?: Record<string, string>): Promise<Response> => {
-    return fetchBackend(input, {
-        method: "POST",
-        headers: headersJsonContentType,
-        body: JSON.stringify(body),
-    }, additionalQuery);
+export const postBackend = (
+    input: string,
+    body: object,
+    additionalQuery?: Record<string, string>
+): Promise<Response> => {
+    return fetchBackend(
+        input,
+        {
+            method: "POST",
+            headers: headersJsonContentType,
+            body: JSON.stringify(body),
+        },
+        additionalQuery
+    );
 };
 
-export const putBackend = (input: string, body: object, additionalQuery?: Record<string, string>): Promise<Response> => {
-    return fetchBackend(input, {
-        method: "PUT",
-        headers: headersJsonContentType,
-        body: JSON.stringify(body),
-    }, additionalQuery);
+export const putBackend = (
+    input: string,
+    body: object,
+    additionalQuery?: Record<string, string>
+): Promise<Response> => {
+    return fetchBackend(
+        input,
+        {
+            method: "PUT",
+            headers: headersJsonContentType,
+            body: JSON.stringify(body),
+        },
+        additionalQuery
+    );
 };
 
-export const deleteBackend = (input: string | URL, additionalQuery?: Record<string, string>): Promise<Response> => {
-    return fetchBackend(input, {
-        method: "DELETE",
-    }, additionalQuery);
+export const deleteBackend = (
+    input: string | URL,
+    additionalQuery?: Record<string, string>
+): Promise<Response> => {
+    return fetchBackend(
+        input,
+        {
+            method: "DELETE",
+        },
+        additionalQuery
+    );
 };
 
 export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
@@ -112,11 +136,35 @@ export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>
         };
         eventSource.onmessage = (ev) => {
             console.log(`server event data ${ev.data}`);
-            setCurrentValue(ev.data);
+            let dederangedData = JSON.parse(ev.data);
+            if ("message" in dederangedData) {
+                dederangedData = null;
+            }
+            setCurrentValue(dederangedData);
         };
         return () => {
             eventSource.close();
         };
     }, [additionalQuery, email, path]);
+    if (currentValue) console.log(`currentValue ${currentValue}`);
     return currentValue;
+};
+
+export function mapValue(
+    value: number,
+    oldMin: number,
+    oldMax: number,
+    newMin: number,
+    newMax: number
+) {
+    const mapped = ((value - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin;
+    return Math.max(3, mapped);
+}
+
+export const useSensorUpdate = (plantationid: string) => {
+    const [wilg, temp, nasl, timestamp] =
+        useSSE<SensorUpdate>("/api/sensors", { plantationUUID: plantationid }) ?? [];
+    const date = timestamp && new Date(timestamp * 1000);
+    const parsedWilg = wilg && mapValue(wilg, 300, 1000, 0, 100);
+    return parsedWilg && temp && nasl && date ? ([parsedWilg, temp, nasl, date] as const) : null;
 };

@@ -20,7 +20,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavigationListItem from "./NavigationListItem";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import SensorsIcon from "@mui/icons-material/Sensors";
+// import SensorsIcon from "@mui/icons-material/Sensors";
 // import YardIcon from '@mui/icons-material/Yard';
 import GrassIcon from "@mui/icons-material/Grass";
 import FenceIcon from "@mui/icons-material/Fence";
@@ -86,10 +86,10 @@ export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind
                         Hodowla
                     </NavigationListItem>
                     <Divider variant="middle" />
-                    <NavigationListItem href="sensors" icon={<SensorsIcon />}>
+                    {/* <NavigationListItem href="sensors" icon={<SensorsIcon />}>
                         Sensory
                     </NavigationListItem>
-                    <Divider variant="middle" />
+                    <Divider variant="middle" /> */}
                     <NavigationListItem href="predictions" icon={<AutoAwesomeIcon />}>
                         Prognozy
                     </NavigationListItem>

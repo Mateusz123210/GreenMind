@@ -1,15 +1,15 @@
 "use client";
 import { AddButton } from "@/components/AddButton";
 import { PlantCard } from "@/components/PlantCard";
-import { jsonFetcher, postBackend, useBackend } from "@/services/backend";
+import { postBackend, useBackend } from "@/services/backend";
 import { Plant } from "@/types/rest";
-import { Box, Button, LinearProgress, Stack, TextField, Typography } from "@mui/material";
+import { Box, LinearProgress, Stack, TextField, Typography } from "@mui/material";
 
 export default function Page() {
-    const { data: plantsRes, isLoading, mutate } = useBackend<{plants: Plant[]}>("/api/plants");
-    const plants = plantsRes?.plants
-    console.log("plant:")
-    console.log(plants)
+    const { data: plantsRes, isLoading, mutate } = useBackend<{ plants: Plant[] }>("/api/plants");
+    const plants = plantsRes?.plants;
+    console.log("plant:");
+    console.log(plants);
     return (
         <Stack gap={3}>
             <Typography variant="h5">Rośliny</Typography>
@@ -27,14 +27,17 @@ export default function Page() {
                         max_illuminance: 20,
                     });
 
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     mutate(postBackend("/api/plant", newObject) as any, {
-                        optimisticData: { plants: [
-                            ...plants!,
-                            Object.assign(data, {
-                                uuid: Math.random() + "",
-                                description: data.comments,
-                            }),
-                        ]},
+                        optimisticData: {
+                            plants: [
+                                ...plants!,
+                                Object.assign(data, {
+                                    uuid: Math.random() + "",
+                                    description: data.comments,
+                                }),
+                            ],
+                        },
                     });
                 }}
             >
@@ -47,13 +50,10 @@ export default function Page() {
             </AddButton>
             <Stack gap={2}>
                 {isLoading && <LinearProgress />}
-                {plants instanceof Array && plants?.map((plant) => (
-                    <PlantCard
-                        id={plant.uuid}
-                        key={plant.uuid}
-                        title={plant.name}
-                    />
-                ))}
+                {plants instanceof Array &&
+                    plants?.map((plant) => (
+                        <PlantCard id={plant.uuid} key={plant.uuid} title={plant.name} />
+                    ))}
             </Stack>
         </Stack>
     );

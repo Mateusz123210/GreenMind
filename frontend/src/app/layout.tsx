@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -7,6 +7,9 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "@/styles/theme";
 import { DrawerLayout } from "@/components/DrawerLayout";
 import { SnackbarProvider } from "notistack";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import "dayjs/locale/pl";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -33,9 +36,11 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <SnackbarProvider/>
-                    <DrawerLayout subpageTitle="Dashboard">{children}</DrawerLayout>
+                    <LocalizationProvider adapterLocale="pl" dateAdapter={AdapterDayjs}>
+                        <CssBaseline />
+                        <SnackbarProvider />
+                        <DrawerLayout subpageTitle="Dashboard">{children}</DrawerLayout>
+                    </LocalizationProvider>
                 </ThemeProvider>
             </body>
         </html>

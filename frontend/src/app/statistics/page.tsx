@@ -4,17 +4,19 @@ import { useBackend } from "@/services/backend";
 import { DerangedStatistic } from "@/types/rest";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 
-const testFetcher = () =>
-    Promise.resolve({
-        "Average plant conditions by days": [
-            ["2025-01-13", 1001.4, 22.62, 22.1],
-            ["2025-01-14", 1000.61, 22.62, 22.24],
-        ],
-    }); 
+// const testFetcher = () =>
+//     Promise.resolve({
+//         "Average plant conditions by days": [
+//             ["2025-01-13", 1001.4, 22.62, 22.1],
+//             ["2025-01-14", 1000.61, 22.62, 22.24],
+//         ],
+//     });
 export default function Page() {
-    const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528"
-    const {data: dataPayload, isLoading} = useBackend<DerangedStatistic>('/api/statistics', {plantationUUID: plantation as string})
-    const data = dataPayload?.["Average plant conditions by days"]
+    const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528";
+    const { data: dataPayload, isLoading } = useBackend<DerangedStatistic>("/api/statistics", {
+        plantationUUID: plantation as string,
+    });
+    const data = dataPayload?.["Average plant conditions by days"];
     if (!data && !isLoading) {
         return "error";
     }
