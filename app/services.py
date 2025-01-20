@@ -32,7 +32,7 @@ def get_plant(plantUUID, access_token, email):
         "min_temperature": plant.min_temperature,
         "opt_temperature": plant.opt_temperature,
         "max_temperature": plant.max_temperature,
-        "min_moisture": plant.min_temperature,
+        "min_moisture": plant.min_moisture,
         "opt_moisture": plant.opt_moisture,
         "max_moisture": plant.max_moisture,
         "min_illuminance": plant.min_illuminance,
@@ -272,7 +272,7 @@ def edit_plant(data: PlantEditSchema, access_token, email):
     
     if new_opt_illuminance > new_max_illuminance:
         raise HTTPException(status_code=400, detail="Optimal illuminance can not be greater than maximum illuminance!")
-     
+    print(edit_data) 
     crud.edit_plant(plant.uuid, edit_data)
                                   
     return Response(status_code = 200)
