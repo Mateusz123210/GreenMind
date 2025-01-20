@@ -112,20 +112,23 @@ export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
 
 export const useLoginInfo = () => useLocalStorage("email");
 
-export const useBackend = <T>(url: string, additionalQuery?: Record<string, string>) => {
+export const useBackend = <T>(url: string, additionalQuery?: Record<string, string>, suspend: boolean = false) => {
     const isLoggedIn = Boolean(useLoginInfo());
     return useSWR<T>(
-        isLoggedIn && [url, ...(!additionalQuery ? [] : Object.keys(additionalQuery))],
+        isLoggedIn && !suspend && [url, ...(!additionalQuery ? [] : Object.keys(additionalQuery))],
         ([url]) => jsonFetcher(url, undefined, additionalQuery)
     );
 };
 
 //wilgotność temp nasł
-export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>) => {
+export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>, suspend: boolean = false) => {
     const email = useLoginInfo();
 
     const [currentValue, setCurrentValue] = useState<T | null>(null);
     useEffect(() => {
+        if (suspend) {
+            return
+        }
         const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + path);
         const at = localStorage.getItem("access_token");
         url.searchParams.append("accessToken", at!);
@@ -153,7 +156,7 @@ export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>
         return () => {
             eventSource.close();
         };
-    }, [additionalQuery, email, path]);
+    }, [additionalQuery, email, path, suspend]);
     if (currentValue) console.log(`currentValue ${currentValue}`);
     return currentValue;
 };

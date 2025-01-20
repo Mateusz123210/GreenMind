@@ -1,9 +1,10 @@
 "use client";
 import { Graph } from "@/components/Graph";
+import { PlantationChooser } from "@/components/PlantationChooser";
 import { useBackend } from "@/services/backend";
-import { DerangedStatistic } from "@/types/rest";
+import { DerangedStatistic, Plantation } from "@/types/rest";
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 // const testFetcher = () =>
 //     Promise.resolve({
@@ -13,30 +14,48 @@ import { useMemo } from "react";
 //         ],
 //     });
 export default function Page() {
-    const plantation = "1735683658.5245671485665a807c7-5986-4338-920e-7eba0cfd9528";
-    const plantationQueryParams = useMemo(() => ({plantationUUID: plantation}), [plantation])
-    const { data: dataPayload, isLoading } = useBackend<DerangedStatistic>("/api/statistics", plantationQueryParams);
+    const [chosenPlantation, setChosenPlantation] = useState<Plantation | null>(null);
+    console.log(chosenPlantation)
+    const plantation = chosenPlantation?.uuid;
+    const plantationQueryParams = useMemo(() => ({ plantationUUID: plantation }), [plantation]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: dataPayload, isLoading } = useBackend<DerangedStatistic>(
+        "/api/statistics",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        plantationQueryParams as any,
+        !Boolean(chosenPlantation)
+    );
     const data = dataPayload?.["Average plant conditions by days"];
-    if (!data && !isLoading) {
-        return "error";
-    }
     if (isLoading) {
         return <CircularProgress />;
     }
 
-    const xAxis = data!.map((entry) => entry[0]);
-    const temperature = data!.map((entry) => entry[1]);
-    const moisture = data!.map((entry) => entry[2]);
-    const illuminance = data!.map((entry) => entry[3]);
+    const xAxis = data?.map((entry) => entry[0]);
+    const temperature = data?.map((entry) => entry[1]);
+    const moisture = data?.map((entry) => entry[2]);
+    const illuminance = data?.map((entry) => entry[3]);
 
     return (
         <Stack gap={3}>
             <Typography variant="h5" component="h2">
                 Statystyki
             </Typography>
-            <Graph color="#ce0606" data={temperature} label="Temperatura" xAxis={xAxis} />
-            <Graph color="#02d5d1" data={moisture} label="Wilgotność gleby" xAxis={xAxis} />
-            <Graph color="#f28e2c" data={illuminance} label="Nasłonecznienie" xAxis={xAxis} />
+            <PlantationChooser
+                plantation={chosenPlantation}
+                onPlantationChange={setChosenPlantation}
+            />
+            {data && (
+                <>
+                    <Graph color="#ce0606" data={temperature!} label="Temperatura" xAxis={xAxis!} />
+                    <Graph color="#02d5d1" data={moisture!} label="Wilgotność gleby" xAxis={xAxis!} />
+                    <Graph
+                        color="#f28e2c"
+                        data={illuminance!}
+                        label="Nasłonecznienie"
+                        xAxis={xAxis!}
+                    />
+                </>
+            )}
             {/* <Paper sx={{ p: 2 }}>
                 <Typography variant="h6">Zużycie wody</Typography>
                 <LineChart
