@@ -65,13 +65,13 @@ const PlantationSensors: React.FC<SensorProps> = ({ plantationid }) => {
         <>
             <Stack direction="row" gap={4}>
                 <Typography variant="h5">
-                    <ThermostatIcon /> {temp}°C
+                    <ThermostatIcon /> {temp.toFixed(2)}°C
                 </Typography>
                 <Typography variant="h5">
-                    <OpacityIcon /> {wilg}%
+                    <OpacityIcon /> {wilg.toFixed(2)}%
                 </Typography>
                 <Typography variant="h5">
-                    <WbSunnyIcon /> {nasl}lx
+                    <WbSunnyIcon /> {nasl.toFixed(2)}lx
                 </Typography>
             </Stack>
             <Typography variant="caption">

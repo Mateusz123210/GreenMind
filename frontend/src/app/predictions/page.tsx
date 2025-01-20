@@ -25,6 +25,7 @@ export default function Page() {
                 Predykcje
             </Typography>
             <PlantationChooser plantation={chosenPlantation} onPlantationChange={setChosenPlantation}/>
+            {chosenPlantation && <>
             <Paper sx={{ p: 2 }}>
                 <Typography variant="h6">Wyliczony czas optymalnego podlania</Typography>
                 <Typography>{prediction || "Brak danych"}</Typography>
@@ -37,7 +38,7 @@ export default function Page() {
                             {watering[0]}l - {new Date(watering[1]).toLocaleString("pl-PL")}
                         </div>
                     ))}
-            </Paper>
+            </Paper></>}
         </Stack>
     );
 }

@@ -31,8 +31,8 @@ export default function Page() {
     }
 
     const xAxis = data?.map((entry) => entry[0]);
-    const temperature = data?.map((entry) => entry[1]);
-    const moisture = data?.map((entry) => entry[2]);
+    const moisture = data?.map((entry) => entry[1]);
+    const temperature = data?.map((entry) => entry[2]);
     const illuminance = data?.map((entry) => entry[3]);
 
     return (

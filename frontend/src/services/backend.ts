@@ -114,8 +114,9 @@ export const useLoginInfo = () => useLocalStorage("email");
 
 export const useBackend = <T>(url: string, additionalQuery?: Record<string, string>, suspend: boolean = false) => {
     const isLoggedIn = Boolean(useLoginInfo());
+    console.log([url, ...(!additionalQuery ? [] : Object.values(additionalQuery))])
     return useSWR<T>(
-        isLoggedIn && !suspend && [url, ...(!additionalQuery ? [] : Object.keys(additionalQuery))],
+        isLoggedIn && !suspend && [url, ...(!additionalQuery ? [] : Object.values(additionalQuery))],
         ([url]) => jsonFetcher(url, undefined, additionalQuery)
     );
 };
