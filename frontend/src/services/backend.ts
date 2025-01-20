@@ -1,5 +1,5 @@
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { guardResOk, refreshTokens } from "./auth";
+import { guardResOk, refreshTokens, updateStorage } from "./auth";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { enqueueSnackbar } from "notistack";
@@ -21,19 +21,27 @@ export const fetchBackend = async (
             url.searchParams.append(key, val);
         });
     }
-    const response = await fetch(url, init);
+    let response = await fetch(url, init);
     if (response.status == 401) {
-        const refreshTokenResponse = await refreshTokens();
-        url = new URL(process.env.NEXT_PUBLIC_BACKEND_URL! + input);
-        url.searchParams.append("accessToken", refreshTokenResponse!["access_token"]);
-        url.searchParams.append("access_token", refreshTokenResponse!["access_token"]);
-        url.searchParams.append("email", refreshTokenResponse!["email"]);
-        const fetchResponse = await fetch(url, init);
-        if (fetchResponse.status == 403) {
-            localStorage.clear();
-            window.dispatchEvent(new Event("storage"));
-            return guardResOk(response);
+        const refreshTokenResponse = await refreshTokens(at!);
+        if (refreshTokenResponse !== null){
+
+            url = new URL(process.env.NEXT_PUBLIC_BACKEND_URL! + input);
+            url.searchParams.append("accessToken", refreshTokenResponse!["access_token"]);
+            url.searchParams.append("access_token", refreshTokenResponse!["access_token"]);
+            url.searchParams.append("email", email!);
+
+            updateStorage("access_token", refreshTokenResponse!["access_token"]);
+            updateStorage("refresh_token", refreshTokenResponse!["refresh_token"]);
+
+            response = await fetch(url, init);
+            if (response.status == 403) {
+                localStorage.clear();
+                window.dispatchEvent(new Event("storage"));
+                return guardResOk(response);
+            }
         }
+        
         return guardResOk(response);
     }
     if (response.status == 403) {

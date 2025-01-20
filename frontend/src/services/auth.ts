@@ -1,5 +1,7 @@
 import { enqueueSnackbar } from "notistack";
 import { headersJsonContentType } from "./backend";
+import { Mutex } from "async-mutex";
+import { access } from "fs";
 
 export interface User {
     email: string;
@@ -66,25 +68,48 @@ export const login = (email: string, password: string) => {
         });
 };
 
-export const refreshTokens = async () => {
-    const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/refresh-token`);
-    url.searchParams.append("refreshToken", localStorage.getItem("refresh_token")!);
-    url.searchParams.append("email", localStorage.getItem("email")!);
-    return fetch(url, {
-        method: "POST",
-    })
-        .then(guardResOk)
-        .then((res) => res.json())
-        .then((data) => {
-            updateStorage("email", data.email);
-            updateStorage("access_token", data.access_token);
-            updateStorage("refresh_token", data.refresh_token);
+
+let tokens = {"previous_access_token": "", "access_token": "", "refresh_token": ""}
+const mutex = new Mutex()
+
+export const refreshTokens = async (prev_access_token: string) => {
+    return mutex.runExclusive(async () => {
+
+        if (prev_access_token === tokens["previous_access_token"]){
             return {
-                email: data.email,
-                access_token: data.access_token,
-                refresh_token: data.refresh_token,
+                access_token: tokens["access_token"],
+                refresh_token: tokens["refresh_token"],
             };
-        });
+
+        }
+
+        tokens["previous_access_token"] = prev_access_token
+
+        const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/refresh-token`);
+        url.searchParams.append("refreshToken", localStorage.getItem("refresh_token")!);
+        url.searchParams.append("email", localStorage.getItem("email")!);
+
+        return fetch(url, {
+            method: "POST",
+        })
+            .then(guardResOk)
+            .then((res) => res.json())
+            .then((data) => {
+                updateStorage("access_token", data.access_token);
+                updateStorage("refresh_token", data.refresh_token);
+                tokens["access_token"] = data.access_token
+                tokens["refresh_token"] = data.refresh_token
+
+                return {
+                    access_token: data.access_token,
+                    refresh_token: data.refresh_token,
+                };
+            })
+            .catch((err) => {
+                tokens["previous_access_token"] = ""
+                return null
+            })
+    })
 };
 
 export const logout = async () => {
@@ -96,10 +121,15 @@ export const logout = async () => {
 
     const response = await fetch(url, { method: "POST" });
     if (response.status == 401) {
-        const refreshTokenResponse = await refreshTokens();
+        console.log("401")
+        const refreshTokenResponse = await refreshTokens(accessToken);
+        if (refreshTokenResponse === null){
+            localStorage.clear();
+            window.dispatchEvent(new Event("storage")); 
+            return
+        }
         url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/logout`);
         accessToken = refreshTokenResponse!["access_token"];
-        email = refreshTokenResponse!["email"];
         url.searchParams.append("accessToken", accessToken);
         url.searchParams.append("email", email);
         await fetch(url, { method: "POST" });
@@ -120,10 +150,14 @@ export const deleteAccount = async () => {
 
     const response = await fetch(url, { method: "DELETE" });
     if (response.status == 401) {
-        const refreshTokenResponse = await refreshTokens();
+        const refreshTokenResponse = await refreshTokens(accessToken);
+        if (refreshTokenResponse === null){
+            localStorage.clear();
+            window.dispatchEvent(new Event("storage")); 
+            return
+        }
         url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account`);
         accessToken = refreshTokenResponse!["access_token"];
-        email = refreshTokenResponse!["email"];
         url.searchParams.append("accessToken", accessToken);
         url.searchParams.append("email", email);
         await fetch(url, { method: "DELETE" });
