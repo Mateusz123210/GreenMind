@@ -43,17 +43,22 @@ export const PlantationCard: React.FC<Props> = ({ title, id }) => {
 
     return (
         <Card>
-                <RemoveButton absolute
-                    onSubmit={() => {
-                        globalMutate(
-                            "/api/plantation",
-                            deleteBackend("/api/plantation", { plantationUUID: id })
-                        );
-                    }}
-                />
-            <CardHeader title={title}>
-            </CardHeader>
+            <RemoveButton
+                absolute
+                onSubmit={() => {
+                    globalMutate(
+                        "/api/plantation",
+                        deleteBackend("/api/plantation", { plantationUUID: id })
+                    );
+                }}
+            />
             <CardContent>
+                <Typography variant="h5" component="h2">
+                    {title}
+                </Typography>
+                <Typography sx={{ color: "text.secondary", mb: 4 }}>
+                    {plantation?.plant_name}
+                </Typography>
                 {isLoading && <LinearProgress />}
                 {error && "error"}
                 {plantation && <AddWaterInfoButton plantationid={id} />}
@@ -76,13 +81,13 @@ const PlantationSensors: React.FC<SensorProps> = ({ plantationid }) => {
     return (
         <>
             <Stack direction="row" gap={4}>
-                <Typography variant="h5">
+                <Typography variant="h5" sx={{color: "#c34e66"}}>
                     <ThermostatIcon /> {temp.toFixed(2)}°C
                 </Typography>
-                <Typography variant="h5">
+                <Typography variant="h5" sx={{color: "skyblue"}}>
                     <OpacityIcon /> {wilg.toFixed(2)}%
                 </Typography>
-                <Typography variant="h5">
+                <Typography variant="h5" sx={{color: "orange"}}>
                     <WbSunnyIcon /> {nasl.toFixed(0)}lx
                 </Typography>
             </Stack>
@@ -128,7 +133,7 @@ const AddWaterInfoButton: React.FC<SensorProps> = ({ plantationid }) => {
         e.preventDefault();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = Object.fromEntries(new FormData(e.nativeEvent.target as any).entries());
-        data.wateringTime = String(dayjs(data.wateringTime as string, "DD.MM.YYYY HH:mm").unix());
+        data.wateringTime = String(dayjs(data.wateringTime as string, "DD.MM.YYYY HH:mm").unix);
         console.log(data);
         postBackend("/api/water", data).then(() => setIsShown(false));
     };

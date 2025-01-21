@@ -1,7 +1,7 @@
 'use client'
-import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { FormEvent, PropsWithChildren, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { PropsWithChildren, useState } from "react";
 
 interface Props extends PropsWithChildren {
     onSubmit: () => void;
@@ -15,7 +15,7 @@ export const RemoveButton: React.FC<Props> = ({onSubmit, absolute = false}) => {
     }
     return (
         <>
-            <Button sx={{ float: "right", m: 1 }} color="error" startIcon={<AddIcon />} onClick={() => setIsOpen(true)} variant="outlined">
+            <Button sx={{ float: "right", m: 1 }} color="error" startIcon={<DeleteIcon />} onClick={() => setIsOpen(true)} variant="outlined">
                 Usuń
             </Button>
             <Dialog open={isOpen}>

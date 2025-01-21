@@ -20,7 +20,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavigationListItem from "./NavigationListItem";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-// import SensorsIcon from "@mui/icons-material/Sensors";
+import SensorsIcon from "@mui/icons-material/Sensors";
+import CloudIcon from '@mui/icons-material/Cloud';
 // import YardIcon from '@mui/icons-material/Yard';
 import GrassIcon from "@mui/icons-material/Grass";
 import FenceIcon from "@mui/icons-material/Fence";
@@ -52,9 +53,9 @@ export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind
                     <IconButton
                         aria-label="Open menu"
                         color="inherit"
-                        hidden={isDrawerOpen}
-                        sx={{ visibility: isDrawerOpen ? "hidden" : "visible" }}
-                        onClick={() => email && setDrawerOpen(true)}
+                        hidden={isDrawerOpen || !email}
+                        sx={{ visibility: isDrawerOpen || !email ? "hidden" : "visible" }}
+                        onClick={() => setDrawerOpen(true)}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -86,10 +87,10 @@ export const DrawerLayout: React.FC<Props> = ({ children, pageTitle = "GreenMind
                         Hodowla
                     </NavigationListItem>
                     <Divider variant="middle" />
-                    {/* <NavigationListItem href="sensors" icon={<SensorsIcon />}>
-                        Sensory
+                    <NavigationListItem href="sensors" icon={<SensorsIcon />}>
+                        Dane
                     </NavigationListItem>
-                    <Divider variant="middle" /> */}
+                    <Divider variant="middle" />
                     <NavigationListItem href="predictions" icon={<AutoAwesomeIcon />}>
                         Prognozy
                     </NavigationListItem>

@@ -4,6 +4,7 @@ import useSWR from "swr";
 import { useEffect, useMemo, useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { SensorUpdate } from "@/types/rest";
+import { useRouter } from "next/navigation";
 
 export const fetchBackend = async (
     input: string | URL,
@@ -24,8 +25,7 @@ export const fetchBackend = async (
     let response = await fetch(url, init);
     if (response.status == 401) {
         const refreshTokenResponse = await refreshTokens(at!);
-        if (refreshTokenResponse !== null){
-
+        if (refreshTokenResponse !== null) {
             url = new URL(process.env.NEXT_PUBLIC_BACKEND_URL! + input);
             url.searchParams.append("accessToken", refreshTokenResponse!["access_token"]);
             url.searchParams.append("access_token", refreshTokenResponse!["access_token"]);
@@ -41,7 +41,7 @@ export const fetchBackend = async (
                 return guardResOk(response);
             }
         }
-        
+
         return guardResOk(response);
     }
     if (response.status == 403) {
@@ -112,23 +112,32 @@ export const jsonFetcher = (...args: Parameters<typeof fetchBackend>) =>
 
 export const useLoginInfo = () => useLocalStorage("email");
 
-export const useBackend = <T>(url: string, additionalQuery?: Record<string, string>, suspend: boolean = false) => {
+export const useBackend = <T>(
+    url: string,
+    additionalQuery?: Record<string, string>,
+    suspend: boolean = false
+) => {
     const isLoggedIn = Boolean(useLoginInfo());
-    console.log([url, ...(!additionalQuery ? [] : Object.values(additionalQuery))])
+    console.log([url, ...(!additionalQuery ? [] : Object.values(additionalQuery))]);
     return useSWR<T>(
-        isLoggedIn && !suspend && [url, ...(!additionalQuery ? [] : Object.values(additionalQuery))],
+        isLoggedIn &&
+            !suspend && [url, ...(!additionalQuery ? [] : Object.values(additionalQuery))],
         ([url]) => jsonFetcher(url, undefined, additionalQuery)
     );
 };
 
 //wilgotność temp nasł
-export const useSSE = <T>(path: string, additionalQuery?: Record<string, string>, suspend: boolean = false) => {
+export const useSSE = <T>(
+    path: string,
+    additionalQuery?: Record<string, string>,
+    suspend: boolean = false
+) => {
     const email = useLoginInfo();
 
     const [currentValue, setCurrentValue] = useState<T | null>(null);
     useEffect(() => {
         if (suspend) {
-            return
+            return;
         }
         const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}` + path);
         const at = localStorage.getItem("access_token");
@@ -174,10 +183,21 @@ export function mapValue(
 }
 
 export const useSensorUpdate = (plantationid: string) => {
-    const plantationQueryParams = useMemo(() => ({plantationUUID: plantationid}), [plantationid])
+    const plantationQueryParams = useMemo(() => ({ plantationUUID: plantationid }), [plantationid]);
     const [wilg, temp, nasl, timestamp] =
         useSSE<SensorUpdate>("/api/sensors", plantationQueryParams) ?? [];
     const date = timestamp && new Date(timestamp * 1000);
-    const parsedWilg = wilg && mapValue(wilg, 300, 1000, 0, 100);
+    const parsedWilg = wilg && mapValue(wilg, 300, 1300, 0, 100);
     return parsedWilg && temp && nasl && date ? ([parsedWilg, temp, nasl, date] as const) : null;
+};
+
+export const useRedirectNotLogged = () => {
+    const email = useLoginInfo();
+    const router = useRouter();
+    useEffect(() => {
+        if (!window.localStorage.getItem("email")) {
+            console.log(email)
+            router.replace("/");
+        }
+    }, [email, router]);
 };

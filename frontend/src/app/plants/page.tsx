@@ -1,12 +1,13 @@
 "use client";
 import { AddButton } from "@/components/AddButton";
 import { PlantCard } from "@/components/PlantCard";
-import { postBackend, useBackend } from "@/services/backend";
+import { postBackend, useBackend, useRedirectNotLogged } from "@/services/backend";
 import { Plant } from "@/types/rest";
 import { Box, LinearProgress, Stack, TextField, Typography } from "@mui/material";
 
 export default function Page() {
     const { data: plantsRes, isLoading, mutate } = useBackend<{ plants: Plant[] }>("/api/plants");
+    useRedirectNotLogged();
     const plants = plantsRes?.plants;
     console.log("plant:");
     console.log(plants);

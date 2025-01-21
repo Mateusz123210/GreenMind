@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { FormEvent, PropsWithChildren, useState } from "react";
 
 interface Props<T> extends PropsWithChildren {
-    onSubmit: (values: T) => void;
+    onSubmit: (values: T, close: () => void) => void;
 }
 export const AddButton = <T,>({ onSubmit, children }: Props<T>) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -13,7 +13,7 @@ export const AddButton = <T,>({ onSubmit, children }: Props<T>) => {
         const data = Object.fromEntries(new FormData(e.nativeEvent.target as any).entries());
         console.log(data);
         e.preventDefault();
-        onSubmit(data as T);
+        onSubmit(data as T, () => setIsOpen(false));
     };
     return (
         <>

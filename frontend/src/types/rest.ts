@@ -16,7 +16,8 @@ export interface PlantationDetails {
     name: string;
     token: string;
     latitude: string;
-    longitude: string;
+    longtitude: string;
+    plant_name: string;
 }
 
 export interface PredictionInfo {
@@ -50,3 +51,16 @@ export interface PlantConfig {
 export type DerangedStatistic = {
     "Average plant conditions by days": Array<[string, number, number, number]>;
 };
+
+export type DerangedWeather = {
+    weatherData: [Array<{
+        precipitation: number;
+        temperature: number;
+        uv_index: number;
+        time: string;
+    }>];
+};
+
+export type DerangedSensors = {
+    sensorsMeasurements: Array<[number, number, number, number]>
+}

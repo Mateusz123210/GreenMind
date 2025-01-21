@@ -2,9 +2,9 @@
 import { AddButton } from "@/components/AddButton";
 import { PlantationCard } from "@/components/PlantationCard";
 import { PlantChooser } from "@/components/PlantChooser";
-import { postBackend, useBackend } from "@/services/backend";
+import { postBackend, useBackend, useRedirectNotLogged } from "@/services/backend";
 import { Plant, Plantation, PlantationDetails } from "@/types/rest";
-import { CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 export default function Page() {
@@ -16,23 +16,25 @@ export default function Page() {
     } = useBackend<{ plantations: Plantation[] }>("/api/plantations");
     const plantations = plantationsData?.plantations;
     const [chosenPlant, setChosenPlant] = useState<Plant | null>(null);
+    useRedirectNotLogged();
 
     return (
         <Stack gap={3}>
             <Typography variant="h5">Hodowle</Typography>
             <AddButton<PlantationDetails>
-                onSubmit={(data) => {
+                onSubmit={(data, close) => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const modData = data as any
-                    modData.plant_id = chosenPlant?.name ?? ''
-                    mutate(postBackend("/api/plantation", modData).then(() => plantationsData));
+                    const modData = data as any;
+                    modData.plant_id = chosenPlant?.uuid ?? "";
+                    mutate(postBackend("/api/plantation", modData).then(() => plantationsData)).then(close);
                 }}
             >
-                <Stack direction="column" gap={3}>
+                <Stack direction="column" gap={2} py={2}>
                     <TextField name="name" label="nazwa" />
-                    <TextField name="latitude" label="latitude" />
-                    <TextField name="longitude" label="longitude" />
-                    <TextField name="token" label="token" />
+                    <Box>
+                        <TextField name="latitude" label="latitude" />
+                        <TextField name="longtitude" label="longtitude" />
+                    </Box>
                     <PlantChooser plant={chosenPlant} onPlantationChange={setChosenPlant} />
                 </Stack>
             </AddButton>

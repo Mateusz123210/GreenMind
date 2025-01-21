@@ -1,7 +1,7 @@
 "use client";
 import { Graph } from "@/components/Graph";
 import { PlantationChooser } from "@/components/PlantationChooser";
-import { useBackend } from "@/services/backend";
+import { useBackend, useRedirectNotLogged } from "@/services/backend";
 import { DerangedStatistic, Plantation } from "@/types/rest";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -25,13 +25,14 @@ export default function Page() {
         plantationQueryParams as any,
         !Boolean(chosenPlantation)
     );
+    useRedirectNotLogged();
     const data = dataPayload?.["Average plant conditions by days"];
     if (isLoading) {
         return <CircularProgress />;
     }
 
     const xAxis = data?.map((entry) => entry[0]);
-    const moisture = data?.map((entry) => entry[1]);
+    const moisture = data?.map((entry) => entry[1]).map(x => x/11);
     const temperature = data?.map((entry) => entry[2]);
     const illuminance = data?.map((entry) => entry[3]);
 
@@ -46,13 +47,14 @@ export default function Page() {
             />
             {data && (
                 <>
-                    <Graph color="#ce0606" data={temperature!} label="Temperatura" xAxis={xAxis!} />
-                    <Graph color="#02d5d1" data={moisture!} label="Wilgotność gleby" xAxis={xAxis!} />
+                    <Graph color="#ce0606" data={temperature!} label="Temperatura" xAxis={xAxis!} unit="°C" />
+                    <Graph color="#02d5d1" data={moisture!} label="Wilgotność gleby" xAxis={xAxis!} unit="%" />
                     <Graph
                         color="#f28e2c"
                         data={illuminance!}
                         label="Nasłonecznienie"
                         xAxis={xAxis!}
+                        unit="lx"
                     />
                 </>
             )}
