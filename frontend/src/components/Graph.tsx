@@ -15,6 +15,7 @@ export const Graph: React.FC<Props> = ({ color, data, xAxis, label, unit }) => {
             <Typography variant="h6">{label}</Typography>
             <LineChart
                 xAxis={[{ data: xAxis, scaleType: "band" }]}
+                yAxis={[{label: `${label} (${unit})`}]}
                 series={[
                     {
                         label: label,
@@ -28,6 +29,7 @@ export const Graph: React.FC<Props> = ({ color, data, xAxis, label, unit }) => {
                 slotProps={{
                     legend: {
                         position: { vertical: "bottom", horizontal: "middle" },
+                        padding: 16,
                     },
                 }}
             />
