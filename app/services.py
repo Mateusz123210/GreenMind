@@ -13,7 +13,7 @@ from app.weather_kafka_controller import WeatherKafkaController
 
 weather_kafka_controller = WeatherKafkaController()
 
-moisture_range = (0, 100)
+moisture_range = (0, 10000)
 temperature_range = (-100, 70)
 illuminance_range = (0, 100000)
 
