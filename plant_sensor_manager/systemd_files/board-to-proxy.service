@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Python script which takes sensor data
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/debian/plant_poc/file_logger.py
+Restart=on-failure
+User=debian
+
+[Install]
+WantedBy=multi-user.target
+

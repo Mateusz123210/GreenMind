@@ -10,6 +10,7 @@ python = "^3.11"
 requests = "^2.32.3"
 pycryptodome = "^3.21.0"
 confluent-kafka = "2.7.0"
+pytest = "^8.3.4"
 
 [tool.poetry.group.dev.dependencies]
 pylama = "^8.4.1"
