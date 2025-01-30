@@ -15,7 +15,7 @@ import { useMemo, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { PlantSlider } from "./PlantSlider";
 import { PlantConfig } from "@/types/rest";
-import { deleteBackend, putBackend, useBackend } from "@/services/backend";
+import { deleteBackend, mapValue, putBackend, useBackend } from "@/services/backend";
 import { RemoveButton } from "./RemoveButton";
 import { mutate as globalMutate } from "swr";
 
@@ -85,9 +85,9 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                 payload["max_illuminance"] = newValue[2];
                 break;
             case "moisture":
-                payload["min_moisture"] = newValue[0];
-                payload["opt_moisture"] = newValue[1];
-                payload["max_moisture"] = newValue[2];
+                payload["min_moisture"] = mapValue(newValue[0], 0, 100, 300, 1300)
+                payload["opt_moisture"] = mapValue(newValue[1], 0, 100, 300, 1300)
+                payload["max_moisture"] = mapValue(newValue[2], 0, 100, 300, 1300)
                 break;
             case "temperature":
                 payload["min_temperature"] = newValue[0];
