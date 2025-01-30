@@ -70,12 +70,18 @@ interface Props {
 // } satisfies PlantConfig)
 export const PlantCard: React.FC<Props> = ({ title, id }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
-    const plantQueryParams = useMemo(() => ({plantUUID: id}), [id])
+    const plantQueryParams = useMemo(() => ({ plantUUID: id }), [id]);
     const {
-        data: plantConfig,
+        data: plantConfigPreparsed,
         isLoading,
         mutate,
     } = useBackend<PlantConfig>("/api/plant", plantQueryParams);
+    const plantConfig: PlantConfig | undefined = plantConfigPreparsed && {
+        ...plantConfigPreparsed,
+        min_moisture: mapValue(plantConfigPreparsed.min_moisture, 300, 1300, 0, 100),
+        opt_moisture: mapValue(plantConfigPreparsed.opt_moisture, 300, 1300, 0, 100),
+        max_moisture: mapValue(plantConfigPreparsed.max_moisture, 300, 1300, 0, 100),
+    };
     const onValueChange = (type: SliderType) => (newValue: [number, number, number]) => {
         const payload: Partial<Record<keyof PlantConfig | "plantUUID", number | string>> = {};
         switch (type) {
@@ -85,9 +91,9 @@ export const PlantCard: React.FC<Props> = ({ title, id }) => {
                 payload["max_illuminance"] = newValue[2];
                 break;
             case "moisture":
-                payload["min_moisture"] = mapValue(newValue[0], 0, 100, 300, 1300)
-                payload["opt_moisture"] = mapValue(newValue[1], 0, 100, 300, 1300)
-                payload["max_moisture"] = mapValue(newValue[2], 0, 100, 300, 1300)
+                payload["min_moisture"] = mapValue(newValue[0], 0, 100, 300, 1300);
+                payload["opt_moisture"] = mapValue(newValue[1], 0, 100, 300, 1300);
+                payload["max_moisture"] = mapValue(newValue[2], 0, 100, 300, 1300);
                 break;
             case "temperature":
                 payload["min_temperature"] = newValue[0];
