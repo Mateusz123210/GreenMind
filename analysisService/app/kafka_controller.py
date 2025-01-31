@@ -38,6 +38,7 @@ class KafkaController:
 
 
     def handle_task(self, message: str):
+        print("TASK")
         loaded = None
 
         try:
@@ -46,7 +47,12 @@ class KafkaController:
                 
         except json.JSONDecodeError:
             return
+        print(loaded)
         weather_data=loaded['weather_data']
+        date_format = "%Y-%m-%dT%H:%M"
+        for index, x in enumerate(weather_data):
+            weather_data[index]["time"] = datetime.strptime(x["time"], date_format)
+        print(weather_data)
         # Convert weather data to a DataFrame
         weather_df = pd.DataFrame(weather_data)
         weather_df=weather_df.rename(columns={"temperature": "temperature_2m", "time": "hour"})
@@ -54,6 +60,8 @@ class KafkaController:
         # Example usage:
         sensors_data= loaded['sensors_data']
         start_moisture_level = average_moisture(sensors_data)
+        print(start_moisture_level)
+        print(weather_df)
         try:
             __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -64,9 +72,10 @@ class KafkaController:
             result = predict_moisture_drop(model_pipeline, weather_df, start_moisture_level, opt_moisture_level)
             new_prediction_data={}
             new_prediction_data["predicted_watering_time"] = result
+            print(new_prediction_data)
         except Exception as e:
             return 
-        self.save_to_database(id = loaded["uuid"], new_prediction_data = new_prediction_data)
+        # self.save_to_database(id = loaded["uuid"], new_prediction_data = new_prediction_data)
 
     @mongo_predictions_transactional
     def save_to_database(self, id, new_prediction_data, session):
